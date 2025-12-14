@@ -1,0 +1,59 @@
+{
+  "name": "Hello World - Minimal Test",
+  "nodes": [
+    {
+      "id": "trigger-1",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [250, 300],
+      "parameters": {}
+    },
+    {
+      "id": "set-1",
+      "name": "Set Hello World",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [450, 300],
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1",
+              "name": "message",
+              "value": "Hello World!",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Set Hello World",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "created": "2025-12-14",
+    "purpose": "Minimal test workflow for validating n8n-MCP integration",
+    "validation": {
+      "profile": "strict",
+      "result": "passed",
+      "errors": 0,
+      "warnings": 0
+    }
+  }
+}

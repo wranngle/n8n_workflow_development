@@ -1,55 +1,63 @@
 #!/usr/bin/env node
 /**
  * auto-git-stage.js
- * 
+ *
  * Hook: PostToolUse (Write)
  * Purpose: Auto-stage workflow files after writing
  */
 
 const { execSync } = require('child_process');
 const path = require('path');
+const { logHook, readStdinJson, outputResult, getProjectRoot } = require('./hook-utils');
 
-let input = '';
-process.stdin.setEncoding('utf8');
+async function main() {
+  logHook('auto-git-stage', 'Hook triggered');
 
-process.stdin.on('data', chunk => {
-  input += chunk;
-});
-
-process.stdin.on('end', () => {
   try {
-    const data = JSON.parse(input);
+    const data = await readStdinJson();
     const filePath = data.tool_input?.file_path || '';
-    const projectDir = process.env.CLAUDE_PROJECT_DIR || '.';
-    
+    const projectDir = getProjectRoot();
+
+    // Normalize path separators for comparison
+    const normalizedPath = filePath.replace(/\\/g, '/');
+
+    logHook('auto-git-stage', 'File analysis', {
+      filePath,
+      normalizedPath,
+      projectDir
+    });
+
     // Only auto-stage workflow files
-    if (filePath.includes('workflows') && filePath.endsWith('.json')) {
+    if (normalizedPath.includes('workflows') && normalizedPath.endsWith('.json')) {
       try {
         // Check if we're in a git repo
-        execSync('git rev-parse --is-inside-work-tree', { 
+        execSync('git rev-parse --is-inside-work-tree', {
           cwd: projectDir,
           stdio: 'pipe'
         });
-        
+
         // Stage the file
         const relativePath = path.relative(projectDir, filePath);
         execSync(`git add "${relativePath}"`, {
           cwd: projectDir,
           stdio: 'pipe'
         });
-        
-        const output = {
+
+        logHook('auto-git-stage', 'File staged', { relativePath });
+        outputResult({
           continue: true,
           systemMessage: `📎 Auto-staged: ${relativePath}`
-        };
-        console.log(JSON.stringify(output));
+        });
       } catch (gitError) {
-        // Not a git repo or git not available - skip silently
+        logHook('auto-git-stage', 'Git operation failed', { error: gitError.message });
       }
     }
-    
+
     process.exit(0);
   } catch (e) {
+    logHook('auto-git-stage', 'Error occurred', { error: e.message });
     process.exit(0);
   }
-});
+}
+
+main();

@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "index:youtube": "node scripts/youtube-indexer.js",
+    "cache:transcripts": "node scripts/cache-top-transcripts.js",
     "process:discord": "node scripts/discord-qa-processor.js",
     "process:discord-general": "node scripts/discord-general-processor.js",
     "test": "echo \"No tests configured yet\" && exit 0"

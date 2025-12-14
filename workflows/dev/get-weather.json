@@ -1,0 +1,133 @@
+{
+  "name": "Get Weather - Simple Demo",
+  "nodes": [
+    {
+      "id": "trigger-1",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "parameters": {}
+    },
+    {
+      "id": "weather-1",
+      "name": "Get Weather",
+      "type": "n8n-nodes-base.openWeatherMap",
+      "typeVersion": 1,
+      "position": [460, 300],
+      "parameters": {
+        "operation": "currentWeather",
+        "locationSelection": "cityName",
+        "cityName": "New York",
+        "format": "metric",
+        "language": "en"
+      },
+      "credentials": {
+        "openWeatherMapApi": {
+          "id": "CREDENTIAL_ID_REQUIRED",
+          "name": "OpenWeatherMap API"
+        }
+      },
+      "onError": "continueRegularOutput",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 1000
+    },
+    {
+      "id": "format-1",
+      "name": "Format Output",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [680, 300],
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "city",
+              "name": "city",
+              "value": "={{ $json.name }}",
+              "type": "string"
+            },
+            {
+              "id": "country",
+              "name": "country",
+              "value": "={{ $json.sys.country }}",
+              "type": "string"
+            },
+            {
+              "id": "temperature",
+              "name": "temperature",
+              "value": "={{ $json.main.temp }}°C",
+              "type": "string"
+            },
+            {
+              "id": "feels_like",
+              "name": "feels_like",
+              "value": "={{ $json.main.feels_like }}°C",
+              "type": "string"
+            },
+            {
+              "id": "description",
+              "name": "description",
+              "value": "={{ $json.weather[0].description }}",
+              "type": "string"
+            },
+            {
+              "id": "humidity",
+              "name": "humidity",
+              "value": "={{ $json.main.humidity }}%",
+              "type": "string"
+            },
+            {
+              "id": "wind_speed",
+              "name": "wind_speed",
+              "value": "={{ $json.wind.speed }} m/s",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": false
+      }
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get Weather",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Weather": {
+      "main": [
+        [
+          {
+            "node": "Format Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": [
+    {
+      "name": "weather"
+    },
+    {
+      "name": "demo"
+    }
+  ]
+}

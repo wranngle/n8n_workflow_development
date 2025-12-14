@@ -73,6 +73,7 @@ venv/
 # LOGS
 # ===================
 logs/
+.claude/logs/
 *.log
 npm-debug.log*
 

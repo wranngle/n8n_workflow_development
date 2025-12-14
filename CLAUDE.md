@@ -858,5 +858,74 @@ reddit_knowledge:
 
 ---
 
+## KNOWN LIMITATIONS
+
+### External Service Access
+
+| Service | Limitation | Workaround |
+|---------|-----------|------------|
+| **n8n.io Template Pages** | WebFetch returns CSS/marketing content, no workflow JSON | Use MCP `get_template` or Zie619 GitHub library |
+| **Medium Articles** | HTTP 403 Forbidden (bot blocking) | Use n8n community forum or Reddit instead |
+| **YouTube Transcripts** | WebFetch blocked for youtube.com | Use YouTube MCP or pre-cached transcripts |
+| **MCP Template IDs** | Some template IDs from external sources don't exist in MCP database | Use `search_templates` with keywords instead of `get_template` with IDs |
+
+### API Requirements
+
+| Feature | Requirement | Configuration |
+|---------|-------------|---------------|
+| **n8n Instance Access** | N8N_API_KEY required | Set in `.env` file |
+| **Discord Live Search** | DISCORD_TOKEN required | Optional - use local database instead |
+| **YouTube Transcripts** | YOUTUBE_API_KEY for live fetch | Pre-cached transcripts available offline |
+
+### PDF/Document Processing with AI
+
+**Critical**: OpenAI/Claude/Gemini APIs do NOT handle PDF files natively like their web UIs do.
+
+**Solution Architecture**:
+1. **Text-based PDFs**: Use `Extract from File` node
+2. **Scanned/Image PDFs**: Use Mistral OCR API (Template 3102)
+3. **Pass extracted content** to AI Agent
+
+---
+
+## VIOLATION PREVENTION CHECKLIST
+
+**STOP before every workflow request. Did you:**
+
+### Mandatory Pre-Checks
+- [ ] Run `n8n_health_check()` FIRST to verify API connectivity
+- [ ] Check YouTube transcript cache before WebFetch
+- [ ] Check Discord local database before live MCP
+- [ ] Check for existing workflows with `n8n_list_workflows`
+
+### Use Specialized Tools
+- [ ] Invoke `n8n-workflow-architect` agent for complex workflows
+- [ ] Use Skill tool to invoke `n8n-workflow-dev` skill
+- [ ] Check task templates with `list_tasks` before manual config
+- [ ] Use `/preflight` or `/workflow` slash commands
+
+### Documentation Protocol
+- [ ] Follow waterfall: MCP Server → Context7 → Ref → Exa → Web
+- [ ] Cache fetched API docs to `context/api-docs/`
+- [ ] Document findings in RUNBOOK format
+
+### Output Standards
+- [ ] Validate workflows before deployment
+- [ ] Save workflows to correct directory (dev/staging/production)
+- [ ] Follow git commit format: `[n8n] {action}: {workflow-name}`
+
+---
+
+## HOOK DEBUGGING
+
+If hooks don't appear to fire, check `.claude/logs/hooks.log` for execution traces.
+
+**Common Issues**:
+1. **Session Continuation**: SessionStart hook only fires on fresh sessions
+2. **Working Directory**: Hooks use relative paths, must run from project root
+3. **Permissions**: Check `.claude/settings.json` permissions block
+
+---
+
 *Last Updated: 2025-12-14*
-*Version: 1.4.0* - Added Discord local searchable knowledge base (2,930 Q&A pairs)
+*Version: 1.5.0* - Added Known Limitations, Violation Prevention Checklist, Hook debugging
