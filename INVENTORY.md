@@ -118,7 +118,7 @@ D:\Things\Work\Wranngle\n8n\
 |-----|-----------|---------------|
 | Zie619 Library | 4,343 | GitHub Raw URLs (always works) |
 | MCP Templates | 2,709 | n8n-mcp tools |
-| n8n Instance | - | n8n.atgfw.com (when deployed) |
+| n8n Instance | - | your-n8n-instance.com (when deployed) |
 
 ---
 

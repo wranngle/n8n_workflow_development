@@ -11,7 +11,7 @@ Initial knowledge to populate the memory MCP server for n8n workflow development
   "entityType": "platform",
   "observations": [
     "n8n is a workflow automation platform with 528+ nodes",
-    "Self-hosted at https://n8n.atgfw.com",
+    "Self-hosted at https://your-n8n-instance.com",
     "Workflows are stored as JSON files",
     "Uses credential store for secure authentication",
     "Supports webhooks, schedules, and event triggers"

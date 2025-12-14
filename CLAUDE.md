@@ -812,9 +812,9 @@ mcp__n8n-mcp__n8n_create_workflow({name: "...", nodes: [...], connections: {...}
 
 ```yaml
 n8n_instance:
-  url: https://n8n.atgfw.com
+  url: https://your-n8n-instance.com
   api_key: [CONFIGURE IN ENV]
-  webhook_base: https://n8n.atgfw.com/webhook/
+  webhook_base: https://your-n8n-instance.com/webhook/
 
 workflow_library:
   api: https://zie619.github.io/n8n-workflows/api

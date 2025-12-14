@@ -32,7 +32,7 @@ Ensure these are configured in your Claude Code settings:
 
 ### Environment Variables
 ```bash
-N8N_API_URL=https://n8n.atgfw.com
+N8N_API_URL=https://your-n8n-instance.com
 N8N_API_KEY=your-api-key-here
 ```
 

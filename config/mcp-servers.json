@@ -30,7 +30,7 @@
         "n8n_health_check"
       ],
       "config": {
-        "N8N_API_URL": "https://n8n.atgfw.com",
+        "N8N_API_URL": "https://your-n8n-instance.com",
         "N8N_API_KEY": "${N8N_API_KEY}",
         "MCP_MODE": "stdio"
       },

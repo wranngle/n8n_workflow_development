@@ -386,7 +386,7 @@ git tag -a "workflow-{name}-v1.0" -m "Production deployment"
 {one-paragraph description}
 
 ### Location
-- Instance: https://n8n.atgfw.com/workflow/{id}
+- Instance: https://your-n8n-instance.com/workflow/{id}
 - File: workflows/production/{name}.json
 - Git tag: workflow-{name}-v1.0
 

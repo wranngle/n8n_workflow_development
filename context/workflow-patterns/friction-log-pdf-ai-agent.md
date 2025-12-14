@@ -33,7 +33,7 @@
 ```bash
 # Add to .env
 N8N_API_KEY=your_api_key_here
-N8N_BASE_URL=https://n8n.atgfw.com
+N8N_BASE_URL=https://your-n8n-instance.com
 ```
 
 **Priority**: P0 - Must fix before any workflow deployment

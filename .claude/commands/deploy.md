@@ -72,7 +72,7 @@ If activate=true and environment=production:
 - Workflow ID: {id}
 - Created/Updated: {timestamp}
 - Active: {true/false}
-- URL: https://n8n.atgfw.com/workflow/{id}
+- URL: https://your-n8n-instance.com/workflow/{id}
 
 ### Post-Deploy Checklist
 - [ ] Workflow saved to workflows/{environment}/
