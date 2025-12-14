@@ -1,0 +1,121 @@
+{
+  "name": "Webhook Echo - Demo",
+  "nodes": [
+    {
+      "id": "webhook-1",
+      "name": "Receive Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [240, 300],
+      "webhookId": "webhook-echo-demo",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "echo",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "id": "process-1",
+      "name": "Process Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [460, 300],
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "received_at",
+              "name": "received_at",
+              "value": "={{ $now.toISO() }}",
+              "type": "string"
+            },
+            {
+              "id": "method",
+              "name": "method",
+              "value": "={{ $json.headers['content-type'] }}",
+              "type": "string"
+            },
+            {
+              "id": "payload",
+              "name": "payload",
+              "value": "={{ $json.body }}",
+              "type": "object"
+            },
+            {
+              "id": "message",
+              "name": "message",
+              "value": "Webhook received successfully",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": false
+      }
+    },
+    {
+      "id": "respond-1",
+      "name": "Send Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [680, 300],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": true, \"received_at\": $json.received_at, \"content_type\": $json.method, \"echo\": $json.payload, \"message\": $json.message } }}",
+        "options": {
+          "responseCode": 200,
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "X-Processed-By",
+                "value": "n8n-workflow"
+              }
+            ]
+          }
+        }
+      },
+      "onError": "continueRegularOutput"
+    }
+  ],
+  "connections": {
+    "Receive Webhook": {
+      "main": [
+        [
+          {
+            "node": "Process Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Data": {
+      "main": [
+        [
+          {
+            "node": "Send Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "tags": [
+    {
+      "name": "webhook"
+    },
+    {
+      "name": "demo"
+    }
+  ]
+}
