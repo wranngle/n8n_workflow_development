@@ -5,14 +5,18 @@
 # ===================
 # NEVER commit these
 .env
-.env.*
-*.env
+.env.local
+.env.*.local
 credentials*.json
 secrets*.json
 **/credentials/**
 **/secrets/**
 *.key
 *.pem
+
+# BUT DO commit example files
+!.env.example
+!config/mcp-credentials.example.env
 
 # ===================
 # TEMPORARY FILES
