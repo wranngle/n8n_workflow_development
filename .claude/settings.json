@@ -1,0 +1,96 @@
+{
+  "$schema": "https://claude.ai/schemas/settings.json",
+  "description": "n8n Workflow Development Automation Hooks",
+  
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/detect-workflow-intent.js\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    
+    "PreToolUse": [
+      {
+        "matcher": "mcp__n8n-mcp__n8n_create_workflow",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/pre-deploy-check.js\"",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/workflow-file-guard.js\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    
+    "PostToolUse": [
+      {
+        "matcher": "mcp__n8n-mcp__n8n_create_workflow|mcp__n8n-mcp__n8n_update_full_workflow",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/post-deploy-log.js\"",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/auto-git-stage.js\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/session-init.js\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  },
+  
+  "permissions": {
+    "allow": [
+      "Bash(npm run:*)",
+      "Bash(node:*)",
+      "Bash(git status:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Read(D:\\Things\\Work\\Wranngle\\n8n\\**)",
+      "Write(D:\\Things\\Work\\Wranngle\\n8n\\workflows\\**)",
+      "Edit(D:\\Things\\Work\\Wranngle\\n8n\\workflows\\**)",
+      "mcp__n8n-mcp__*"
+    ],
+    "deny": [
+      "Write(**/.env*)",
+      "Write(**/*credentials*)",
+      "Write(**/*secret*)"
+    ]
+  }
+}

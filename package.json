@@ -1,0 +1,33 @@
+{
+  "name": "n8n-workflow-toolkit",
+  "version": "1.0.0",
+  "description": "AI-powered n8n workflow development toolkit with comprehensive knowledge bases (YouTube, Discord, Reddit) and MCP integration",
+  "main": "index.js",
+  "scripts": {
+    "index:youtube": "node scripts/youtube-indexer.js",
+    "test": "echo \"No tests configured yet\" && exit 0"
+  },
+  "keywords": [
+    "n8n",
+    "workflow",
+    "automation",
+    "ai",
+    "mcp",
+    "knowledge-base",
+    "youtube",
+    "discord",
+    "reddit"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.6.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/n8n-workflow-toolkit.git"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

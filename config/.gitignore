@@ -1,0 +1,8 @@
+# Ignore actual credentials
+.env
+*.env
+!*.example.env
+
+# Ignore any credential files
+credentials.json
+secrets.json

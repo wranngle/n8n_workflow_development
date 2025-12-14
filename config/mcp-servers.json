@@ -1,0 +1,247 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "MCP Server Registry for n8n Workflow Development",
+  "version": "1.0.0",
+  "lastUpdated": "2025-12-13",
+  
+  "servers": {
+    "n8n-mcp": {
+      "name": "n8n MCP Server",
+      "description": "Primary n8n workflow automation bridge - 528 nodes, 2709 templates",
+      "status": "active",
+      "priority": 1,
+      "capabilities": {
+        "nodeDiscovery": true,
+        "templateSearch": true,
+        "workflowValidation": true,
+        "workflowManagement": true,
+        "aiToolInfo": true
+      },
+      "tools": [
+        "search_nodes",
+        "get_node_essentials", 
+        "get_node_info",
+        "validate_node_operation",
+        "validate_workflow",
+        "search_templates",
+        "get_template",
+        "n8n_create_workflow",
+        "n8n_list_workflows",
+        "n8n_health_check"
+      ],
+      "config": {
+        "N8N_API_URL": "https://n8n.atgfw.com",
+        "N8N_API_KEY": "${N8N_API_KEY}",
+        "MCP_MODE": "stdio"
+      },
+      "documentation": "https://github.com/czlonkowski/n8n-mcp"
+    },
+    
+    "context7": {
+      "name": "Context7 Documentation Server",
+      "description": "Real-time, version-aware documentation injection",
+      "status": "active",
+      "priority": 2,
+      "capabilities": {
+        "libraryDocs": true,
+        "versionAware": true,
+        "codeExamples": true
+      },
+      "tools": [
+        "resolve-library-id",
+        "get-library-docs"
+      ],
+      "useCases": [
+        "SDK documentation lookup",
+        "Library API reference",
+        "Code examples for integrations"
+      ],
+      "documentation": "https://github.com/upstash/context7"
+    },
+    
+    "exa": {
+      "name": "Exa AI Search",
+      "description": "Deep web research and company intelligence",
+      "status": "active", 
+      "priority": 3,
+      "capabilities": {
+        "webSearch": true,
+        "companyResearch": true,
+        "urlCrawling": true,
+        "linkedInSearch": true,
+        "deepResearch": true
+      },
+      "tools": [
+        "web_search_exa",
+        "company_research_exa",
+        "crawling_exa",
+        "linkedin_search_exa",
+        "deep_researcher_start",
+        "deep_researcher_check"
+      ],
+      "useCases": [
+        "API documentation not in Context7",
+        "Researching new services/integrations",
+        "Finding authentication patterns"
+      ]
+    },
+    
+    "ref-tools": {
+      "name": "Ref Documentation Search",
+      "description": "Search documentation across web, GitHub, and private resources",
+      "status": "active",
+      "priority": 3,
+      "capabilities": {
+        "docSearch": true,
+        "urlReading": true,
+        "privateRepos": true
+      },
+      "tools": [
+        "ref_search_documentation",
+        "ref_read_url"
+      ],
+      "useCases": [
+        "Finding API documentation",
+        "Reading specific doc URLs",
+        "Private repository docs"
+      ]
+    },
+    
+    "playwright": {
+      "name": "Playwright Browser Automation",
+      "description": "Web automation, scraping, and testing",
+      "status": "active",
+      "priority": 4,
+      "capabilities": {
+        "navigation": true,
+        "screenshots": true,
+        "formFilling": true,
+        "scraping": true
+      },
+      "tools": [
+        "browser_navigate",
+        "browser_snapshot",
+        "browser_click",
+        "browser_type",
+        "browser_take_screenshot"
+      ],
+      "useCases": [
+        "Testing webhook endpoints",
+        "Scraping data for workflow input",
+        "Automating web-based APIs without REST"
+      ]
+    },
+    
+    "memory": {
+      "name": "Memory Knowledge Graph",
+      "description": "Persistent knowledge storage across sessions",
+      "status": "active",
+      "priority": 5,
+      "capabilities": {
+        "entityStorage": true,
+        "relationMapping": true,
+        "semanticSearch": true
+      },
+      "tools": [
+        "create_entities",
+        "create_relations",
+        "search_nodes",
+        "read_graph"
+      ],
+      "useCases": [
+        "Storing workflow patterns",
+        "Tracking credential requirements",
+        "Mapping integration dependencies"
+      ]
+    },
+    
+    "desktop-commander": {
+      "name": "Desktop Commander",
+      "description": "Local filesystem and process management",
+      "status": "active",
+      "priority": 1,
+      "capabilities": {
+        "fileOperations": true,
+        "processManagement": true,
+        "codeSearch": true
+      },
+      "tools": [
+        "read_file",
+        "write_file",
+        "edit_block",
+        "search_code",
+        "start_process"
+      ],
+      "useCases": [
+        "Reading/writing workflow JSON files",
+        "Running validation scripts",
+        "Managing workflow exports"
+      ]
+    },
+
+    "shadcn": {
+      "name": "shadcn/ui Components",
+      "description": "UI component library reference",
+      "status": "active",
+      "priority": 6,
+      "relevance": "low-for-n8n",
+      "useCases": [
+        "Building custom n8n node UIs",
+        "Dashboard interfaces for workflow monitoring"
+      ]
+    }
+  },
+  
+  "integrationPriority": {
+    "description": "Order to check for documentation/tools when integrating a new service",
+    "sequence": [
+      {
+        "step": 1,
+        "action": "Check n8n-mcp for existing node",
+        "tool": "mcp__n8n-mcp__search_nodes"
+      },
+      {
+        "step": 2,
+        "action": "Check for service-specific MCP server",
+        "tool": "manual-check"
+      },
+      {
+        "step": 3,
+        "action": "Fetch SDK/library docs via Context7",
+        "tool": "mcp__context7__get-library-docs"
+      },
+      {
+        "step": 4,
+        "action": "Search Ref for API documentation",
+        "tool": "mcp__ref-tools__ref_search_documentation"
+      },
+      {
+        "step": 5,
+        "action": "Deep research via Exa",
+        "tool": "mcp__exa__deep_researcher_start"
+      },
+      {
+        "step": 6,
+        "action": "General web search",
+        "tool": "WebSearch"
+      }
+    ]
+  },
+  
+  "externalAPIs": {
+    "zie619WorkflowLibrary": {
+      "name": "Zie619 n8n Workflow Collection",
+      "description": "4,343 community workflows searchable via API",
+      "baseUrl": "https://zie619.github.io/n8n-workflows",
+      "apiBase": "https://zie619.github.io/n8n-workflows/api",
+      "endpoints": {
+        "search": "/api/workflows?q={query}&trigger={type}&complexity={level}&page={page}&per_page={count}",
+        "detail": "/api/workflows/{filename}",
+        "diagram": "/api/workflows/{filename}/diagram",
+        "categories": "/api/categories",
+        "stats": "/api/stats"
+      },
+      "github": "https://github.com/Zie619/n8n-workflows"
+    }
+  }
+}

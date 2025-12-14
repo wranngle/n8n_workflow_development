@@ -1,0 +1,9 @@
+{
+  "videoId": "3FfCRbq3XMs",
+  "title": "n8n Webhook Security: Learn This Before It's Too Late",
+  "channel": "Nate Herk | AI Automation",
+  "fetchedAt": "2025-12-14T00:00:00Z",
+  "status": "success",
+  "fullText": "If you're not protecting your web hooks, you're putting yourself at risk for waking up to a $500 bill or leaking your sensitive information. So today I'm going to talk about the three methods of setting up web hook authentication. It's going to be super simple. When we have a web hook that basically triggers our n8n workflow, what we have is a production URL when our web hook is active. And that means anyone that accesses this endpoint can hit our workflow and start it. The immediate risk there is that someone could message your agent a million times and your agent would send a million requests to OpenAI. But then there's also the risk of the agent being hooked up to different tools and systems that access your databases or your knowledge bases or your CRM. So the first method is header auth. For header auth, you create a key and value pair. In order for someone to access our web hook, they would have to put in that exact header auth. The second method is basic auth - very similar but it's more of a username and password. Some platforms have basic auth already integrated. The final one is JWT token auth or JSON web token. The cool thing about JSON web tokens is that it lets you capture a payload. So you can also see who's accessing it - what's their email, are they an admin. You can track sessions, see how many times someone's accessing your backend server. You can also set up their token to only work for a day.",
+  "topics": ["webhook security", "authentication", "header auth", "basic auth", "JWT", "API security", "production workflows"]
+}

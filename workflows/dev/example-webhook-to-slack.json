@@ -1,0 +1,95 @@
+{
+  "name": "Example: Webhook to Slack",
+  "nodes": [
+    {
+      "id": "webhook-1",
+      "name": "Receive Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300],
+      "webhookId": "example-webhook-id",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "example-incoming",
+        "responseMode": "onReceived",
+        "responseData": "allEntries"
+      }
+    },
+    {
+      "id": "transform-1",
+      "name": "Format Message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [450, 300],
+      "parameters": {
+        "language": "javaScript",
+        "jsCode": "// Transform incoming webhook data into Slack message format\nconst incoming = items[0].json;\n\nreturn [{\n  json: {\n    channel: '#notifications',\n    text: `*New Event Received*\\n\\nType: ${incoming.type || 'Unknown'}\\nData: ${JSON.stringify(incoming.data || incoming, null, 2)}\\nTimestamp: ${new Date().toISOString()}`\n  }\n}];"
+      }
+    },
+    {
+      "id": "slack-1",
+      "name": "Send to Slack",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [650, 300],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "channel": {
+          "__rl": true,
+          "mode": "name",
+          "value": "={{ $json.channel }}"
+        },
+        "text": "={{ $json.text }}"
+      },
+      "credentials": {
+        "slackApi": {
+          "id": "REPLACE_WITH_CREDENTIAL_ID",
+          "name": "Slack"
+        }
+      },
+      "onError": "continueErrorOutput",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 1000
+    },
+    {
+      "id": "error-1",
+      "name": "Error Handler",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [650, 500],
+      "parameters": {}
+    }
+  ],
+  "connections": {
+    "Receive Webhook": {
+      "main": [
+        [{ "node": "Format Message", "type": "main", "index": 0 }]
+      ]
+    },
+    "Format Message": {
+      "main": [
+        [{ "node": "Send to Slack", "type": "main", "index": 0 }]
+      ]
+    },
+    "Send to Slack": {
+      "main": [
+        [],
+        [{ "node": "Error Handler", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "saveDataSuccessExecution": "all",
+    "saveDataErrorExecution": "all"
+  },
+  "meta": {
+    "description": "Example workflow demonstrating webhook trigger, data transformation, and Slack notification with error handling",
+    "createdBy": "Claude Code n8n Toolkit",
+    "createdAt": "2025-12-13",
+    "tags": ["example", "webhook", "slack", "notification"]
+  }
+}
