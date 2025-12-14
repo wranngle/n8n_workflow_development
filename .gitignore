@@ -130,3 +130,5 @@ package-lock.json
 yarn.lock
 pnpm-lock.yaml
 n8n Discord bot help.csv
+n8n Discord general.csv
+n8n reddit post 1.txt

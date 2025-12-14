@@ -1,0 +1,875 @@
+{
+  "totalMessages": 4295,
+  "dateRange": {
+    "start": "2025-12-02,12:10:46",
+    "end": "2025-12-13,23:49:51"
+  },
+  "contentTypes": [
+    {
+      "type": "general",
+      "count": 2480
+    },
+    {
+      "type": "question",
+      "count": 1164
+    },
+    {
+      "type": "showcase",
+      "count": 344
+    },
+    {
+      "type": "workflow-share",
+      "count": 288
+    },
+    {
+      "type": "integration",
+      "count": 258
+    },
+    {
+      "type": "error-report",
+      "count": 146
+    },
+    {
+      "type": "community",
+      "count": 109
+    },
+    {
+      "type": "feature-request",
+      "count": 101
+    },
+    {
+      "type": "announcement",
+      "count": 98
+    }
+  ],
+  "topTopics": [
+    {
+      "topic": "general",
+      "count": 2473
+    },
+    {
+      "topic": "conditional",
+      "count": 573
+    },
+    {
+      "topic": "workflows",
+      "count": 564
+    },
+    {
+      "topic": "http-requests",
+      "count": 345
+    },
+    {
+      "topic": "error-handling",
+      "count": 287
+    },
+    {
+      "topic": "scheduling",
+      "count": 232
+    },
+    {
+      "topic": "ai-agents",
+      "count": 206
+    },
+    {
+      "topic": "integration",
+      "count": 121
+    },
+    {
+      "topic": "deployment",
+      "count": 117
+    },
+    {
+      "topic": "authentication",
+      "count": 109
+    },
+    {
+      "topic": "announcement",
+      "count": 95
+    },
+    {
+      "topic": "data-transformation",
+      "count": 79
+    },
+    {
+      "topic": "showcase",
+      "count": 67
+    },
+    {
+      "topic": "code-node",
+      "count": 51
+    },
+    {
+      "topic": "database",
+      "count": 34
+    },
+    {
+      "topic": "mcp-integration",
+      "count": 33
+    },
+    {
+      "topic": "expressions",
+      "count": 31
+    },
+    {
+      "topic": "pagination",
+      "count": 28
+    }
+  ],
+  "topKeywords": [
+    {
+      "keyword": "n8n",
+      "count": 441
+    },
+    {
+      "keyword": "node",
+      "count": 263
+    },
+    {
+      "keyword": "need",
+      "count": 164
+    },
+    {
+      "keyword": "workflow",
+      "count": 153
+    },
+    {
+      "keyword": "using",
+      "count": 146
+    },
+    {
+      "keyword": "don",
+      "count": 141
+    },
+    {
+      "keyword": "anyone",
+      "count": 135
+    },
+    {
+      "keyword": "why",
+      "count": 129
+    },
+    {
+      "keyword": "help",
+      "count": 128
+    },
+    {
+      "keyword": "here",
+      "count": 110
+    },
+    {
+      "keyword": "issue",
+      "count": 104
+    },
+    {
+      "keyword": "sure",
+      "count": 104
+    },
+    {
+      "keyword": "https",
+      "count": 99
+    },
+    {
+      "keyword": "try",
+      "count": 96
+    },
+    {
+      "keyword": "should",
+      "count": 96
+    },
+    {
+      "keyword": "something",
+      "count": 95
+    },
+    {
+      "keyword": "agent",
+      "count": 88
+    },
+    {
+      "keyword": "time",
+      "count": 86
+    },
+    {
+      "keyword": "still",
+      "count": 86
+    },
+    {
+      "keyword": "more",
+      "count": 85
+    },
+    {
+      "keyword": "same",
+      "count": 84
+    },
+    {
+      "keyword": "maybe",
+      "count": 83
+    },
+    {
+      "keyword": "right",
+      "count": 81
+    },
+    {
+      "keyword": "google",
+      "count": 79
+    },
+    {
+      "keyword": "data",
+      "count": 78
+    },
+    {
+      "keyword": "free",
+      "count": 78
+    },
+    {
+      "keyword": "trying",
+      "count": 75
+    },
+    {
+      "keyword": "trigger",
+      "count": 75
+    },
+    {
+      "keyword": "good",
+      "count": 75
+    },
+    {
+      "keyword": "doesn",
+      "count": 72
+    },
+    {
+      "keyword": "dont",
+      "count": 71
+    },
+    {
+      "keyword": "send",
+      "count": 71
+    },
+    {
+      "keyword": "hello",
+      "count": 71
+    },
+    {
+      "keyword": "yes",
+      "count": 70
+    },
+    {
+      "keyword": "where",
+      "count": 70
+    },
+    {
+      "keyword": "error",
+      "count": 70
+    },
+    {
+      "keyword": "yeah",
+      "count": 68
+    },
+    {
+      "keyword": "really",
+      "count": 68
+    },
+    {
+      "keyword": "too",
+      "count": 68
+    },
+    {
+      "keyword": "message",
+      "count": 66
+    },
+    {
+      "keyword": "api",
+      "count": 66
+    },
+    {
+      "keyword": "set",
+      "count": 63
+    },
+    {
+      "keyword": "workflows",
+      "count": 61
+    },
+    {
+      "keyword": "people",
+      "count": 61
+    },
+    {
+      "keyword": "guys",
+      "count": 61
+    },
+    {
+      "keyword": "code",
+      "count": 60
+    },
+    {
+      "keyword": "nodes",
+      "count": 59
+    },
+    {
+      "keyword": "tried",
+      "count": 59
+    },
+    {
+      "keyword": "run",
+      "count": 57
+    },
+    {
+      "keyword": "com",
+      "count": 57
+    }
+  ],
+  "topContributors": [
+    {
+      "username": "3xogsavage",
+      "messages": 336
+    },
+    {
+      "username": "disassembled.",
+      "messages": 293
+    },
+    {
+      "username": "zunjae",
+      "messages": 271
+    },
+    {
+      "username": "7th_ka",
+      "messages": 205
+    },
+    {
+      "username": ".joff",
+      "messages": 174
+    },
+    {
+      "username": "_webdevkin",
+      "messages": 134
+    },
+    {
+      "username": "fireflies2437",
+      "messages": 95
+    },
+    {
+      "username": "mookielian",
+      "messages": 89
+    },
+    {
+      "username": "jabbson",
+      "messages": 83
+    },
+    {
+      "username": "asjadsyed",
+      "messages": 82
+    },
+    {
+      "username": "lewhycopywriting",
+      "messages": 82
+    },
+    {
+      "username": "7hemech",
+      "messages": 79
+    },
+    {
+      "username": "realgaryoak",
+      "messages": 74
+    },
+    {
+      "username": "keathi_",
+      "messages": 70
+    },
+    {
+      "username": "bramkn",
+      "messages": 70
+    },
+    {
+      "username": "supr1yo",
+      "messages": 69
+    },
+    {
+      "username": "alibu6u",
+      "messages": 64
+    },
+    {
+      "username": "chowderr",
+      "messages": 53
+    },
+    {
+      "username": "crispycritterr",
+      "messages": 51
+    },
+    {
+      "username": "stillapple",
+      "messages": 35
+    }
+  ],
+  "dailyActivity": [
+    {
+      "day": "- Each runner has `workdir`",
+      "total": 1,
+      "types": {
+        "general": 1
+      }
+    },
+    {
+      "day": "- Missing fields like `workdir`",
+      "total": 1,
+      "types": {
+        "general": 1
+      }
+    },
+    {
+      "day": "•    Especialista en n8n (workflows complejos",
+      "total": 1,
+      "types": {
+        "general": 1
+      }
+    },
+    {
+      "day": "> Check Hostnames in Environment Variables: Review all your n8n environment variables (e.g.",
+      "total": 1,
+      "types": {
+        "general": 1
+      }
+    },
+    {
+      "day": "2025-12-02",
+      "total": 224,
+      "types": {
+        "showcase": 17,
+        "question": 71,
+        "general": 125,
+        "workflow-share": 16,
+        "integration": 16,
+        "error-report": 7,
+        "community": 3,
+        "feature-request": 4
+      }
+    },
+    {
+      "day": "2025-12-03",
+      "total": 250,
+      "types": {
+        "question": 65,
+        "error-report": 15,
+        "general": 111,
+        "showcase": 39,
+        "workflow-share": 31,
+        "integration": 30,
+        "feature-request": 14,
+        "community": 11,
+        "announcement": 11
+      }
+    },
+    {
+      "day": "2025-12-04",
+      "total": 508,
+      "types": {
+        "showcase": 39,
+        "question": 110,
+        "integration": 21,
+        "workflow-share": 30,
+        "general": 322,
+        "community": 9,
+        "error-report": 13,
+        "feature-request": 12,
+        "announcement": 16
+      }
+    },
+    {
+      "day": "2025-12-05",
+      "total": 682,
+      "types": {
+        "question": 171,
+        "general": 422,
+        "workflow-share": 26,
+        "community": 22,
+        "showcase": 25,
+        "announcement": 14,
+        "error-report": 27,
+        "integration": 24,
+        "feature-request": 18
+      }
+    },
+    {
+      "day": "2025-12-06",
+      "total": 454,
+      "types": {
+        "general": 286,
+        "question": 128,
+        "integration": 24,
+        "showcase": 20,
+        "workflow-share": 21,
+        "feature-request": 5,
+        "error-report": 5,
+        "announcement": 4,
+        "community": 11
+      }
+    },
+    {
+      "day": "2025-12-07",
+      "total": 232,
+      "types": {
+        "question": 70,
+        "general": 127,
+        "showcase": 19,
+        "workflow-share": 14,
+        "error-report": 12,
+        "community": 4,
+        "announcement": 12,
+        "integration": 12,
+        "feature-request": 3
+      }
+    },
+    {
+      "day": "2025-12-08",
+      "total": 498,
+      "types": {
+        "general": 314,
+        "workflow-share": 19,
+        "question": 110,
+        "showcase": 27,
+        "error-report": 19,
+        "announcement": 10,
+        "integration": 18,
+        "community": 12,
+        "feature-request": 15
+      }
+    },
+    {
+      "day": "2025-12-09",
+      "total": 274,
+      "types": {
+        "general": 139,
+        "question": 92,
+        "integration": 36,
+        "error-report": 13,
+        "feature-request": 8,
+        "showcase": 30,
+        "workflow-share": 26,
+        "community": 16,
+        "announcement": 6
+      }
+    },
+    {
+      "day": "2025-12-10",
+      "total": 299,
+      "types": {
+        "general": 141,
+        "question": 103,
+        "showcase": 33,
+        "workflow-share": 31,
+        "integration": 27,
+        "feature-request": 10,
+        "announcement": 5,
+        "community": 6,
+        "error-report": 12
+      }
+    },
+    {
+      "day": "2025-12-11",
+      "total": 354,
+      "types": {
+        "question": 89,
+        "integration": 21,
+        "general": 206,
+        "showcase": 37,
+        "announcement": 8,
+        "workflow-share": 38,
+        "community": 7,
+        "feature-request": 5,
+        "error-report": 10
+      }
+    },
+    {
+      "day": "2025-12-12",
+      "total": 236,
+      "types": {
+        "integration": 17,
+        "general": 129,
+        "question": 75,
+        "showcase": 23,
+        "announcement": 10,
+        "workflow-share": 17,
+        "error-report": 6,
+        "community": 4,
+        "feature-request": 3
+      }
+    },
+    {
+      "day": "2025-12-13",
+      "total": 241,
+      "types": {
+        "general": 131,
+        "question": 72,
+        "showcase": 32,
+        "workflow-share": 15,
+        "community": 4,
+        "feature-request": 4,
+        "error-report": 7,
+        "integration": 9,
+        "announcement": 1
+      }
+    },
+    {
+      "day": "4. Keep everything else (`workdir`",
+      "total": 1,
+      "types": {
+        "general": 1
+      }
+    },
+    {
+      "day": "A bug on Meta Console in the Webhooks section. When you select \"Whatsapp Business Account",
+      "total": 1,
+      "types": {
+        "general": 1
+      }
+    },
+    {
+      "day": "accept\": \"application/json",
+      "total": 1,
+      "types": {
+        "general": 1
+      }
+    },
+    {
+      "day": "After that",
+      "total": 1,
+      "types": {
+        "integration": 1
+      }
+    },
+    {
+      "day": "And you’re right",
+      "total": 1,
+      "types": {
+        "general": 1
+      }
+    },
+    {
+      "day": "Basically",
+      "total": 2,
+      "types": {
+        "question": 1,
+        "general": 1
+      }
+    },
+    {
+      "day": "Because 2 yrs ago I met with an accident now i'am in a bed rest",
+      "total": 2,
+      "types": {
+        "question": 2
+      }
+    },
+    {
+      "day": "Building a scalable architecture",
+      "total": 1,
+      "types": {
+        "general": 1
+      }
+    },
+    {
+      "day": "But how do I concatenate all the items that are returned by the individual web requests? I tried Splits and Merges (but merge what two inputs",
+      "total": 1,
+      "types": {
+        "general": 1
+      }
+    },
+    {
+      "day": "estoy iniciando un proyecto donde quiero integrar n8n + WhatsApp Business Cloud + OpenAI para procesar solicitudes técnicas industriales (imágenes de componentes",
+      "total": 1,
+      "types": {
+        "general": 1
+      }
+    },
+    {
+      "day": "For the AI content detection",
+      "total": 1,
+      "types": {
+        "general": 1
+      }
+    },
+    {
+      "day": "From memory",
+      "total": 1,
+      "types": {
+        "question": 1
+      }
+    },
+    {
+      "day": "Guys",
+      "total": 1,
+      "types": {
+        "question": 1
+      }
+    },
+    {
+      "day": "I am currently exploring n8n",
+      "total": 1,
+      "types": {
+        "question": 1
+      }
+    },
+    {
+      "day": "I have a very simple use case that I just can't figure out: pagination with a cursor where I'm in control of when it stops. (For example",
+      "total": 1,
+      "types": {
+        "general": 1
+      }
+    },
+    {
+      "day": "I'd changed the call to a  different call when entailed changing `GET` to `POST` and the endpoint URL. Since all the invocations were manual",
+      "total": 1,
+      "types": {
+        "general": 1
+      }
+    },
+    {
+      "day": "I’m building a Smart Mirror where a Raspberry Pi handles the interface and sensors",
+      "total": 1,
+      "types": {
+        "integration": 1
+      }
+    },
+    {
+      "day": "I'm certain one of the things they're trying to prevent is cloud providers turning n8n into a turnkey software-as-a-service that users can spin up",
+      "total": 1,
+      "types": {
+        "general": 1
+      }
+    },
+    {
+      "day": "i'm trying to make use of n8n's SSH node",
+      "total": 1,
+      "types": {
+        "general": 1
+      }
+    },
+    {
+      "day": "If you want",
+      "total": 1,
+      "types": {
+        "general": 1
+      }
+    },
+    {
+      "day": "If you’re having issues with your Shopify store or automations",
+      "total": 1,
+      "types": {
+        "showcase": 1,
+        "workflow-share": 1
+      }
+    },
+    {
+      "day": "In n8n I'm trying to copy a Sheet within a Spreadsheet",
+      "total": 1,
+      "types": {
+        "integration": 1
+      }
+    },
+    {
+      "day": "Integration of payment systems",
+      "total": 1,
+      "types": {
+        "general": 1
+      }
+    },
+    {
+      "day": "Most issues come down to bot intents",
+      "total": 1,
+      "types": {
+        "general": 1
+      }
+    },
+    {
+      "day": "Not sure if it's on VAPI's side or n8n",
+      "total": 1,
+      "types": {
+        "question": 1
+      }
+    },
+    {
+      "day": "Once the SOW is uploaded",
+      "total": 1,
+      "types": {
+        "showcase": 1,
+        "workflow-share": 1
+      }
+    },
+    {
+      "day": "One example is the support automation system that connects Slack",
+      "total": 1,
+      "types": {
+        "general": 1
+      }
+    },
+    {
+      "day": "Performance optimization",
+      "total": 1,
+      "types": {
+        "general": 1
+      }
+    },
+    {
+      "day": "Right now",
+      "total": 1,
+      "types": {
+        "general": 1
+      }
+    },
+    {
+      "day": "Rules:  Do NOT add any commentary",
+      "total": 1,
+      "types": {
+        "workflow-share": 1
+      }
+    },
+    {
+      "day": "So I'm trying to create a telegram chatbot that uses the oAI gpt-5-mini tier 2 (which allows me to query more tokens through the API) model",
+      "total": 1,
+      "types": {
+        "general": 1
+      }
+    },
+    {
+      "day": "The issue is that I’ve created an N8N calling agent that works with 11Labs",
+      "total": 1,
+      "types": {
+        "general": 1
+      }
+    },
+    {
+      "day": "The key detail is that you only triggered the flow manually",
+      "total": 1,
+      "types": {
+        "showcase": 1,
+        "workflow-share": 1
+      }
+    },
+    {
+      "day": "To install and now update",
+      "total": 1,
+      "types": {
+        "announcement": 1
+      }
+    },
+    {
+      "day": "Twitch also expects Client-ID header",
+      "total": 1,
+      "types": {
+        "general": 1
+      }
+    },
+    {
+      "day": "Unsupported card type Meta requires internationally enabled credit/debit cards (Visa",
+      "total": 1,
+      "types": {
+        "general": 1
+      }
+    },
+    {
+      "day": "what's the best way to use n8n for free? I'd like to create a basic workflow",
+      "total": 1,
+      "types": {
+        "question": 1
+      }
+    }
+  ]
+}
