@@ -1,4 +1,10 @@
-# CLAUDE.md - n8n Workflow Development Command Center
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+---
+
+# n8n Workflow Development Command Center
 
 This is the **master playbook** for AI-assisted n8n workflow development. Follow these protocols for every workflow request to leverage the full arsenal of tools and ensure production-quality output with minimal developer intervention.
 
@@ -315,22 +321,46 @@ Pre-deployment checklist:
 
 ---
 
-## DIRECTORY STRUCTURE
+## REPOSITORY ARCHITECTURE
+
+### High-Level Structure
+
+This repository is organized as a **knowledge-first workflow development toolkit**. The architecture follows three tiers:
+
+1. **Knowledge Layer** (`context/`) - Pre-indexed searchable knowledge bases
+2. **Tooling Layer** (`.claude/`, `scripts/`, `tools/`) - Development utilities and automation
+3. **Workflow Layer** (`workflows/`) - Actual n8n workflow artifacts in dev/staging/production
+
+### Directory Structure
 
 ```
 n8n/
 ├── .claude/
 │   ├── commands/           # Slash commands for common operations
 │   │   ├── new-workflow.md    # /new-workflow
-│   │   ├── search-library.md  # /search-library  
+│   │   ├── search-library.md  # /search-library
 │   │   ├── validate.md        # /validate
-│   │   └── deploy.md          # /deploy
-│   └── hooks/              # Auto-triggers (future)
+│   │   ├── deploy.md          # /deploy
+│   │   ├── preflight.md       # /preflight - Pre-flight checklist
+│   │   ├── quick-node.md      # /quick-node - Fast node lookup
+│   │   ├── lookup-api.md      # /lookup-api - API doc search
+│   │   └── screenshot-to-workflow.md  # /screenshot-to-workflow
+│   ├── skills/             # 8 specialized n8n skills (auto-activate)
+│   │   ├── n8n-workflow-dev/
+│   │   ├── n8n-expression-syntax/
+│   │   ├── n8n-mcp-tools-expert/
+│   │   ├── n8n-workflow-patterns/
+│   │   ├── n8n-validation-expert/
+│   │   ├── n8n-node-configuration/
+│   │   ├── n8n-code-javascript/
+│   │   └── n8n-code-python/
+│   └── agents/             # Specialized agent definitions
+│       └── n8n-workflow-architect.md  # Main workflow architect agent
 ├── context/
 │   ├── api-docs/           # Cached API documentation
 │   ├── workflow-patterns/  # Reusable workflow patterns
 │   ├── youtube-knowledge/  # YouTube tutorial knowledge base
-│   │   ├── video-index.json    # Searchable video metadata
+│   │   ├── video-index.json    # Searchable video metadata (10,279 videos)
 │   │   ├── transcripts/        # Cached transcript files
 │   │   └── PROTOCOL.md         # Search/fetch documentation
 │   ├── discord-knowledge/  # Discord community knowledge
@@ -339,15 +369,56 @@ n8n/
 │       └── PROTOCOL.md         # Reddit MCP integration guide
 ├── tools/
 │   └── search/             # Search utilities and wrappers
+│       └── workflow-library-api.md  # Community library API docs
 ├── workflows/
 │   ├── dev/                # Development/testing workflows
+│   │   └── example-webhook-to-slack.json  # Example workflow
 │   ├── staging/            # Pre-production validation
 │   └── production/         # Production-ready exports
+├── scripts/
+│   ├── youtube-indexer.js  # Systematic video indexing script
+│   └── git-workflow.md     # Git workflow documentation
 ├── config/
 │   └── mcp-servers.json    # MCP server registry
-├── scripts/                # Utility scripts
-└── CLAUDE.md               # This file (master playbook)
+├── CLAUDE.md               # This file (master playbook)
+├── RUNBOOK.md              # Operational procedures
+├── INVENTORY.md            # Asset inventory
+├── CONTRIBUTING.md         # Contribution guidelines
+├── .env.example            # Environment variables template
+└── package.json            # Node.js dependencies and scripts
 ```
+
+### Key Files to Understand
+
+| File | Purpose | Read First? |
+|------|---------|-------------|
+| `CLAUDE.md` | Master playbook for all n8n development | ✅ Yes - Start here |
+| `RUNBOOK.md` | Step-by-step operational procedures | ⭐ Reference for execution |
+| `context/youtube-knowledge/video-index.json` | 10,279 indexed videos | 📚 Search before building |
+| `.claude/skills/n8n-workflow-dev/SKILL.md` | Master workflow dev skill | 🎯 Auto-activates |
+| `workflows/dev/example-webhook-to-slack.json` | Example workflow structure | 📖 Template reference |
+| `.env.example` | Required environment variables | ⚙️ Setup guide |
+
+### Important Conventions
+
+1. **Node Type Prefixes**:
+   - Use `nodes-base.{name}` for search/validation tools
+   - Use `n8n-nodes-base.{name}` when creating workflows
+   - AI nodes: `@n8n/n8n-nodes-langchain.{name}`
+
+2. **Workflow Storage**:
+   - Dev workflows → `workflows/dev/` (testing only)
+   - Staging → `workflows/staging/` (pre-production)
+   - Production → `workflows/production/` (deployed, git-tracked)
+
+3. **Git Commit Format**:
+   - `[n8n] {action}: {workflow-name} - {description}`
+   - Example: `[n8n] deploy: webhook-to-slack - Production release`
+
+4. **Knowledge Base Priority**:
+   - ALWAYS search existing instance first
+   - Then YouTube → Discord → Reddit → Community Library → Templates
+   - Document findings before building
 
 ---
 
@@ -672,7 +743,36 @@ Auto-activating skills that provide expert guidance. Skills compose seamlessly -
 
 ---
 
-## QUICK REFERENCE: Most Used Commands
+## DEVELOPMENT COMMANDS
+
+### Available npm Scripts
+
+```bash
+# Index YouTube knowledge base (re-fetch all videos from 20 channels)
+npm run index:youtube
+
+# Run tests (currently placeholder)
+npm test
+```
+
+### Custom Slash Commands
+
+These are available in `.claude/commands/` and can be invoked with `/command-name`:
+
+| Command | Purpose | When to Use |
+|---------|---------|-------------|
+| `/preflight` | Run pre-flight checklist | Before starting any workflow |
+| `/new-workflow` | Start new workflow development | Creating new workflow |
+| `/search-library` | Search community workflows | Finding existing solutions |
+| `/validate` | Validate workflow | Before deploying |
+| `/deploy` | Deploy to n8n instance | Production deployment |
+| `/quick-node` | Quick node configuration lookup | Getting node config fast |
+| `/lookup-api` | Find API documentation | Integrating new services |
+| `/analyze-workflow` | Analyze existing workflow | Understanding workflow |
+| `/workflow` | General workflow operations | Common workflow tasks |
+| `/screenshot-to-workflow` | Convert screenshot to workflow | Building from visual |
+
+## QUICK REFERENCE: Most Used MCP Tools
 
 ```bash
 # Search for nodes
@@ -739,4 +839,4 @@ reddit_knowledge:
 ---
 
 *Last Updated: 2025-12-14*
-*Version: 1.2.0* - Added Discord and Reddit Knowledge Base integration
+*Version: 1.3.0* - Enhanced for Claude Code with proper prefix, development commands, and architecture documentation
