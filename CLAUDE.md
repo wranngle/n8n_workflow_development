@@ -51,19 +51,34 @@ Tools:
 
 ### 3. SEARCH DISCORD COMMUNITY
 ```
-MCP Server: v-3/discordmcp (requires DISCORD_TOKEN)
-Target: n8n Discord server (discord.gg/n8n)
-Protocol: context/discord-knowledge/PROTOCOL.md
+LOCAL DATABASE (RECOMMENDED):
+  File: context/discord-knowledge/discord-questions.json
+  Stats: 2,930 real Q&A from April-December 2025
+  Topics: 15 categories, 5,197 keywords indexed
+  Protocol: context/discord-knowledge/PROTOCOL.md (Part 1)
 
-Tools:
-- read-messages({ channel: "support", limit: 50 }) - Get recent messages
-- Channels: #support, #general, #showcase, #integrations
+  Top topics: workflows (1,263), error-handling (560), ai-agents (509),
+              http-requests (509), conditional (444), scheduling (333)
+
+  Quick search:
+  const keywordIndex = require('./context/discord-knowledge/keyword-index.json');
+  const webhookQuestions = keywordIndex['webhook']; // Returns question indexes
+
+LIVE MCP SERVER (FALLBACK):
+  Server: v-3/discordmcp (requires DISCORD_TOKEN)
+  Target: n8n Discord server (discord.gg/n8n)
+  Protocol: context/discord-knowledge/PROTOCOL.md (Part 2)
+
+  Tools:
+  - read-messages({ channel: "support", limit: 50 }) - Get recent messages
+  - Channels: #support, #general, #showcase, #integrations
 
 When to search:
+- ALWAYS search local database FIRST (instant, offline)
+- Use live MCP only for post-Dec 2025 questions or real-time discussions
 - Error messages not in docs
 - Community workarounds
 - Integration-specific questions
-- Real-time debugging help
 ```
 
 ### 4. SEARCH REDDIT COMMUNITY
@@ -824,10 +839,15 @@ youtube_knowledge:
   tags: beginner, ai-agents, webhook, langchain, slack, telegram, whatsapp, rag, memory, voice, multi-agent, error-handling, course, business, templates, etc.
 
 discord_knowledge:
-  mcp_server: v-3/discordmcp
+  local_database: context/discord-knowledge/discord-questions.json
+  total_questions: 2,930
+  date_range: April 23 - December 13, 2025
+  topics_indexed: 15
+  keywords_indexed: 5,197
+  mcp_server: v-3/discordmcp (fallback for real-time)
   target_server: discord.gg/n8n
   protocol: context/discord-knowledge/PROTOCOL.md
-  status: pending (requires DISCORD_TOKEN setup)
+  status: ✅ Local DB ready | ⚠️ Live MCP pending (requires DISCORD_TOKEN)
 
 reddit_knowledge:
   mcp_server: adhikasp/mcp-reddit
@@ -839,4 +859,4 @@ reddit_knowledge:
 ---
 
 *Last Updated: 2025-12-14*
-*Version: 1.3.0* - Enhanced for Claude Code with proper prefix, development commands, and architecture documentation
+*Version: 1.4.0* - Added Discord local searchable knowledge base (2,930 Q&A pairs)

@@ -1,0 +1,277 @@
+{
+  "totalQuestions": 2930,
+  "dateRange": {
+    "earliest": "2025-04-23,09:59:30",
+    "latest": "2025-12-13,16:36:32"
+  },
+  "topTopics": [
+    {
+      "topic": "workflows",
+      "count": 1263
+    },
+    {
+      "topic": "error-handling",
+      "count": 560
+    },
+    {
+      "topic": "ai-agents",
+      "count": 509
+    },
+    {
+      "topic": "http-requests",
+      "count": 509
+    },
+    {
+      "topic": "conditional",
+      "count": 444
+    },
+    {
+      "topic": "scheduling",
+      "count": 333
+    },
+    {
+      "topic": "integration",
+      "count": 306
+    },
+    {
+      "topic": "data-transformation",
+      "count": 267
+    },
+    {
+      "topic": "deployment",
+      "count": 184
+    },
+    {
+      "topic": "authentication",
+      "count": 176
+    }
+  ],
+  "topErrors": [
+    {
+      "error": "connection",
+      "count": 49
+    },
+    {
+      "error": "rate-limit",
+      "count": 11
+    },
+    {
+      "error": "authentication",
+      "count": 8
+    },
+    {
+      "error": "execution",
+      "count": 6
+    },
+    {
+      "error": "validation",
+      "count": 2
+    },
+    {
+      "error": "json-parse",
+      "count": 1
+    }
+  ],
+  "topKeywords": [
+    {
+      "keyword": "node",
+      "count": 752
+    },
+    {
+      "keyword": "this",
+      "count": 471
+    },
+    {
+      "keyword": "have",
+      "count": 440
+    },
+    {
+      "keyword": "that",
+      "count": 423
+    },
+    {
+      "keyword": "workflow",
+      "count": 361
+    },
+    {
+      "keyword": "agent",
+      "count": 298
+    },
+    {
+      "keyword": "error",
+      "count": 290
+    },
+    {
+      "keyword": "when",
+      "count": 286
+    },
+    {
+      "keyword": "using",
+      "count": 278
+    },
+    {
+      "keyword": "there",
+      "count": 233
+    },
+    {
+      "keyword": "google",
+      "count": 206
+    },
+    {
+      "keyword": "want",
+      "count": 204
+    },
+    {
+      "keyword": "data",
+      "count": 203
+    },
+    {
+      "keyword": "need",
+      "count": 182
+    },
+    {
+      "keyword": "trigger",
+      "count": 157
+    },
+    {
+      "keyword": "json",
+      "count": 150
+    },
+    {
+      "keyword": "message",
+      "count": 147
+    },
+    {
+      "keyword": "output",
+      "count": 146
+    },
+    {
+      "keyword": "trying",
+      "count": 144
+    },
+    {
+      "keyword": "help",
+      "count": 144
+    },
+    {
+      "keyword": "http",
+      "count": 133
+    },
+    {
+      "keyword": "request",
+      "count": 131
+    },
+    {
+      "keyword": "like",
+      "count": 130
+    },
+    {
+      "keyword": "nodes",
+      "count": 127
+    },
+    {
+      "keyword": "chat",
+      "count": 126
+    },
+    {
+      "keyword": "file",
+      "count": 125
+    },
+    {
+      "keyword": "webhook",
+      "count": 124
+    },
+    {
+      "keyword": "getting",
+      "count": 123
+    },
+    {
+      "keyword": "into",
+      "count": 123
+    },
+    {
+      "keyword": "make",
+      "count": 119
+    },
+    {
+      "keyword": "tool",
+      "count": 118
+    },
+    {
+      "keyword": "create",
+      "count": 115
+    },
+    {
+      "keyword": "problem",
+      "count": 111
+    },
+    {
+      "keyword": "code",
+      "count": 110
+    },
+    {
+      "keyword": "only",
+      "count": 108
+    },
+    {
+      "keyword": "after",
+      "count": 106
+    },
+    {
+      "keyword": "input",
+      "count": 106
+    },
+    {
+      "keyword": "send",
+      "count": 103
+    },
+    {
+      "keyword": "then",
+      "count": 98
+    },
+    {
+      "keyword": "self",
+      "count": 93
+    },
+    {
+      "keyword": "issue",
+      "count": 93
+    },
+    {
+      "keyword": "time",
+      "count": 90
+    },
+    {
+      "keyword": "running",
+      "count": 88
+    },
+    {
+      "keyword": "just",
+      "count": 86
+    },
+    {
+      "keyword": "work",
+      "count": 85
+    },
+    {
+      "keyword": "should",
+      "count": 83
+    },
+    {
+      "keyword": "some",
+      "count": 82
+    },
+    {
+      "keyword": "where",
+      "count": 80
+    },
+    {
+      "keyword": "workflows",
+      "count": 79
+    },
+    {
+      "keyword": "multiple",
+      "count": 78
+    }
+  ]
+}

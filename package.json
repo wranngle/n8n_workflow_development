@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "index:youtube": "node scripts/youtube-indexer.js",
+    "process:discord": "node scripts/discord-qa-processor.js",
     "test": "echo \"No tests configured yet\" && exit 0"
   },
   "keywords": [

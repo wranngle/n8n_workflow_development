@@ -129,3 +129,4 @@ reddit-mcp-server/
 package-lock.json
 yarn.lock
 pnpm-lock.yaml
+n8n Discord bot help.csv
