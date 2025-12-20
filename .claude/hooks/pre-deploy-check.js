@@ -1,54 +1,81 @@
 #!/usr/bin/env node
 /**
  * pre-deploy-check.js
- *
  * Hook: PreToolUse (n8n_create_workflow)
- * Purpose: Block deployment if validation wasn't performed
+ * FIXES: Always warn if no validation, check nodes, check n8n status, proper output
  */
 
 const fs = require('fs');
-const { logHook, readStdinJson, outputResult } = require('./hook-utils');
+const path = require('path');
+const { logHook, readStdinJson, outputResult, getProjectRoot } = require('./hook-utils');
+
+const projectDir = getProjectRoot();
+const stateFile = path.join(projectDir, '.claude', 'logs', 'session-state.json');
+
+function getSessionState() {
+  try {
+    return JSON.parse(fs.readFileSync(stateFile, 'utf8'));
+  } catch { return { n8nUp: true }; } // Assume up if no state
+}
 
 async function main() {
   logHook('pre-deploy-check', 'Hook triggered');
 
   try {
     const data = await readStdinJson();
-    const transcriptPath = data.transcript_path;
     const toolInput = data.tool_input || {};
+    const transcriptPath = data.transcript_path;
 
-    logHook('pre-deploy-check', 'Checking deployment', {
-      workflowName: toolInput.name,
-      hasTranscript: !!transcriptPath
-    });
+    const issues = [];
 
-    // Check if this workflow has a name (required)
-    if (!toolInput.name) {
-      logHook('pre-deploy-check', 'BLOCKED: No workflow name');
-      console.error('ERROR: Workflow must have a name before deployment');
-      process.exit(2); // Block the action
+    // Check 1: Name required
+    if (!toolInput.name || !toolInput.name.trim()) {
+      logHook('pre-deploy-check', 'BLOCKED: No name');
+      outputResult({ continue: false, systemMessage: '❌ BLOCKED: Workflow needs a name' });
+      process.exit(2);
     }
 
-    // Read transcript to check if validation was performed
+    // Check 2: Nodes array exists and not empty
+    const nodes = toolInput.nodes || [];
+    if (nodes.length === 0) {
+      issues.push('empty workflow (0 nodes)');
+    }
+
+    // Check 3: n8n instance status
+    const state = getSessionState();
+    if (!state.n8nUp) {
+      issues.push('n8n instance unreachable');
+    }
+
+    // Check 4: Validation performed (best effort - transcript may not exist)
+    let validationFound = false;
     if (transcriptPath && fs.existsSync(transcriptPath)) {
-      const fileContent = fs.readFileSync(transcriptPath, 'utf8');
+      const content = fs.readFileSync(transcriptPath, 'utf8');
+      validationFound = content.includes('validate_workflow') || content.includes('validate_node');
+    }
+    if (!validationFound) {
+      issues.push('no validation detected');
+    }
 
-      const hasValidation = fileContent.includes('validate_workflow') ||
-                           fileContent.includes('validate_node_operation');
+    logHook('pre-deploy-check', 'Analysis', {
+      name: toolInput.name,
+      nodeCount: nodes.length,
+      n8nUp: state.n8nUp,
+      validationFound,
+      issues
+    });
 
-      if (!hasValidation) {
-        logHook('pre-deploy-check', 'Warning: No validation detected');
-        outputResult({
-          continue: true,
-          systemMessage: `⚠️ WARNING: Deploying workflow without validation detected.
-Consider running mcp__n8n-mcp__validate_workflow before deployment.`
-        });
-      }
+    // Output warnings if any issues
+    if (issues.length > 0) {
+      outputResult({
+        continue: true, // Warn but allow
+        systemMessage: `⚠️ Deploy warning: ${issues.join(', ')}`
+      });
     }
 
     process.exit(0);
   } catch (e) {
-    logHook('pre-deploy-check', 'Error occurred', { error: e.message });
+    logHook('pre-deploy-check', 'Error', { error: e.message });
     process.exit(0);
   }
 }

@@ -1,9 +1,8 @@
 #!/usr/bin/env node
 /**
  * post-deploy-log.js
- *
  * Hook: PostToolUse (n8n_create_workflow, n8n_update_full_workflow)
- * Purpose: Log all deployments for audit trail
+ * FIXES: Validate input, consistent naming, compact output
  */
 
 const fs = require('fs');
@@ -15,22 +14,31 @@ async function main() {
 
   try {
     const data = await readStdinJson();
+    const toolName = data.tool_name || '';
+
+    // Only log actual deploy actions
+    if (!toolName.includes('create_workflow') && !toolName.includes('update_full_workflow')) {
+      logHook('post-deploy-log', 'Skipped - not a deploy action', { toolName });
+      process.exit(0);
+    }
+
     const projectDir = getProjectRoot();
     const logFile = path.join(projectDir, 'workflows', 'deployment-log.jsonl');
 
     const toolInput = data.tool_input || {};
     const toolOutput = data.tool_output || {};
+    const workflowName = toolInput.name || 'unnamed';
+    const workflowId = toolOutput.id || null;
+    const hasError = !!toolOutput.error;
+    const success = !hasError && !!workflowId;
 
     const logEntry = {
-      timestamp: new Date().toISOString(),
-      action: data.tool_name,
-      workflowName: toolInput.name || 'unknown',
-      workflowId: toolOutput.id || null,
-      sessionId: data.session_id,
-      success: !toolOutput.error
+      ts: new Date().toISOString(),
+      action: toolName.includes('update') ? 'update' : 'create',
+      name: workflowName,
+      id: workflowId,
+      success
     };
-
-    logHook('post-deploy-log', 'Creating log entry', logEntry);
 
     // Ensure workflows directory exists
     const workflowsDir = path.dirname(logFile);
@@ -38,17 +46,20 @@ async function main() {
       fs.mkdirSync(workflowsDir, { recursive: true });
     }
 
-    // Append to log
     fs.appendFileSync(logFile, JSON.stringify(logEntry) + '\n');
+    logHook('post-deploy-log', 'Logged', logEntry);
 
+    // Compact message
+    const status = success ? '✅' : '❌';
+    const idPart = workflowId ? ` (${workflowId})` : '';
     outputResult({
       continue: true,
-      systemMessage: `📋 Deployment logged: ${toolInput.name || 'workflow'} at ${logEntry.timestamp}`
+      systemMessage: `${status} ${logEntry.action}: ${workflowName}${idPart}`
     });
 
     process.exit(0);
   } catch (e) {
-    logHook('post-deploy-log', 'Error occurred', { error: e.message });
+    logHook('post-deploy-log', 'Error', { error: e.message });
     process.exit(0);
   }
 }

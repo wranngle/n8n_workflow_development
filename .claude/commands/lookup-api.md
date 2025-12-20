@@ -1,11 +1,63 @@
 # /lookup-api - Find API Documentation for Integration
 
 Find comprehensive API documentation for a service/integration using the documentation waterfall.
+Supports single service lookup, batch mode for multiple services, and automatic caching.
 
 ## Parameters
+
+### Single Service Mode (default)
 - `service`: Name of the service/API to look up
 
-## Execution Waterfall
+### Batch Mode
+- `services`: Comma-separated list of services (e.g., "slack, hubspot, stripe")
+- `business_process`: (optional) Business process name for folder organization
+- `workflow`: (optional) Workflow name for folder organization
+
+### Caching Options
+- `cache`: Where to save docs. Options:
+  - `registry` (default): Cache to `context/api-docs/{service}/` and update registry
+  - `workflow`: Cache to `workflows/{business_process}/{workflow}/docs/{service}/`
+  - `none`: Don't cache, just return results
+
+## Usage Examples
+
+```
+/lookup-api hubspot
+/lookup-api services=slack,hubspot,stripe
+/lookup-api services=hubspot,stripe business_process=customer_onboarding workflow=welcome_flow
+```
+
+---
+
+## Batch Mode Execution
+
+When multiple services are provided:
+
+```javascript
+// Parse services from comma-separated list
+const services = parseServices(input);
+
+// Run waterfall for each service IN PARALLEL when possible
+for (const service of services) {
+  // Execute waterfall steps 1-5 (below)
+  const docs = await executeWaterfall(service);
+
+  // Cache results based on cache option
+  await cacheDocumentation(docs, {
+    service,
+    businessProcess,
+    workflow,
+    cacheMode
+  });
+
+  // Update registry.yaml
+  await updateRegistry(service, docs);
+}
+```
+
+---
+
+## Execution Waterfall (Per Service)
 
 ### Step 1: Check for Existing n8n Node
 ```
@@ -107,7 +159,93 @@ Setup:
 Saved documentation to: context/api-docs/{service}.md
 ```
 
+---
+
+## Caching Structure
+
+### Registry Mode (default)
+```
+context/api-docs/{service}/
+├── api-reference.md        # Endpoints, methods, auth
+├── ui-features.md          # User-facing docs (if applicable)
+├── sdk-reference.md        # Language-specific SDK (if found)
+├── tutorials.md            # YouTube/tutorial summaries
+└── curl-examples/
+    ├── auth-test.sh
+    └── example-request.sh
+```
+
+### Workflow Mode
+```
+workflows/{business_process}/{workflow}/docs/{service}/
+├── api-reference.md
+├── ui-features.md
+├── sdk-reference.md
+├── tutorials.md
+└── curl-examples/
+    ├── auth-test.sh
+    └── example-request.sh
+```
+
+---
+
+## Registry Update
+
+After caching, update `workflows/registry.yaml`:
+
+```yaml
+# Add or update integration entry
+integrations:
+  {service}:
+    n8n_node: "{found_node_type}"  # or null if no native node
+    used_by: []  # Will be populated when workflows use this
+    docs_cached: true
+    docs_cached_date: "{ISO_DATE}"
+    docs_path: "context/api-docs/{service}/"  # or workflow path
+    auth_type: "{oauth2|api_key|bearer|basic}"
+    api_base: "{base_url}"
+```
+
+---
+
 ## Post-Lookup Actions
-1. Save documentation summary to `context/api-docs/{service}.md`
-2. Add to memory knowledge graph if complex integration
-3. Note any MCP servers that could be added for this service
+
+1. **Cache Documentation**:
+   - Create folder structure per caching mode
+   - Save `api-reference.md` with endpoints, auth, examples
+   - Save `curl-examples/auth-test.sh` for credential testing
+
+2. **Update Registry**:
+   - Add/update integration entry in `workflows/registry.yaml`
+   - Set `docs_cached: true` with date
+   - Record auth_type and api_base
+
+3. **Memory Graph** (optional):
+   - Add to knowledge graph if complex integration
+   - Note any MCP servers that could be added
+
+4. **Return Summary**:
+   - Print brief summary of what was found
+   - List any missing documentation components
+
+---
+
+## Retrieval Log
+
+When caching, also create `retrieval-log.json`:
+
+```json
+{
+  "service": "{service}",
+  "retrieved_at": "{ISO_DATE}",
+  "sources": {
+    "n8n_node": {"found": true, "nodeType": "nodes-base.slack"},
+    "context7": {"found": false, "error": "not_indexed"},
+    "ref_tools": {"found": true, "url": "https://..."},
+    "exa": {"found": false, "skipped": true},
+    "web_search": {"found": false, "skipped": true}
+  },
+  "components_cached": ["api-reference", "curl-examples"],
+  "components_missing": ["sdk-reference", "tutorials"]
+}
+```

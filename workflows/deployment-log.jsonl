@@ -1,0 +1,6 @@
+{"timestamp":"2025-12-18T02:40:37.128Z","action":"n8n_create_workflow","workflowName":"test-workflow","workflowId":"wf123","sessionId":"sess456","success":true}
+{"timestamp":"2025-12-18T02:40:38.120Z","action":"n8n_create_workflow","workflowName":"unknown","workflowId":null,"sessionId":"sess789","success":false}
+{"timestamp":"2025-12-18T02:40:39.132Z","workflowName":"unknown","workflowId":null,"success":true}
+{"ts":"2025-12-18T02:43:23.703Z","action":"create","name":"my-workflow","id":"wf-abc123","success":true}
+{"ts":"2025-12-18T02:43:24.838Z","action":"create","name":"bad-workflow","id":null,"success":false}
+{"ts":"2025-12-18T02:43:25.984Z","action":"update","name":"updated-wf","id":"wf-xyz","success":true}
