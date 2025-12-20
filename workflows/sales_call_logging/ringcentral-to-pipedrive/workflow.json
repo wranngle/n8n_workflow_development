@@ -1,0 +1,208 @@
+{
+  "name": "RingCentral Calls to PipeDrive",
+  "nodes": [
+    {
+      "id": "schedule-trigger",
+      "name": "Every 15 Minutes",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 15
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "get-token",
+      "name": "Get RingCentral Token",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [220, 0],
+      "parameters": {
+        "method": "POST",
+        "url": "https://platform.ringcentral.com/restapi/oauth/token",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "specifyBody": "keypair",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "grant_type",
+              "value": "urn:ietf:params:oauth:grant-type:jwt-bearer"
+            },
+            {
+              "name": "assertion",
+              "value": "={{ $env.RC_USER_JWT }}"
+            }
+          ]
+        }
+      },
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "ringcentral-basic",
+          "name": "RingCentral Client Credentials"
+        }
+      }
+    },
+    {
+      "id": "fetch-calls",
+      "name": "Fetch Call Log",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [440, 0],
+      "parameters": {
+        "method": "GET",
+        "url": "https://platform.ringcentral.com/restapi/v1.0/account/~/extension/~/call-log",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ 'Bearer ' + $json.access_token }}"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "dateFrom",
+              "value": "={{ $now.minus({minutes: 20}).toISO() }}"
+            },
+            {
+              "name": "dateTo",
+              "value": "={{ $now.toISO() }}"
+            },
+            {
+              "name": "view",
+              "value": "Detailed"
+            },
+            {
+              "name": "perPage",
+              "value": "100"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "check-records",
+      "name": "Has Records?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [660, 0],
+      "parameters": {
+        "conditions": {
+          "conditions": [
+            {
+              "id": "1",
+              "leftValue": "={{ $json.records.length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "no-calls",
+      "name": "No Calls",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [880, 120]
+    },
+    {
+      "id": "split-calls",
+      "name": "Split Calls",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [880, -60],
+      "parameters": {
+        "fieldToSplitOut": "records",
+        "include": "noOtherFields"
+      }
+    },
+    {
+      "id": "transform-data",
+      "name": "Transform to PipeDrive",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1100, -60],
+      "parameters": {
+        "language": "javaScript",
+        "mode": "runOnceForEachItem",
+        "jsCode": "// Transform RingCentral call to PipeDrive activity format\nconst call = $input.item.json;\n\n// Build call subject\nconst direction = call.direction === 'Inbound' ? '📞 Incoming' : '📱 Outgoing';\nconst fromNumber = call.from?.phoneNumber || call.from?.name || 'Unknown';\nconst toNumber = call.to?.phoneNumber || call.to?.name || 'Unknown';\n\n// Calculate duration in minutes\nconst durationMins = Math.round((call.duration || 0) / 60);\n\n// Build activity note\nconst note = [\n  `Call ID: ${call.id}`,\n  `Direction: ${call.direction}`,\n  `From: ${fromNumber}`,\n  `To: ${toNumber}`,\n  `Duration: ${durationMins} minutes`,\n  `Result: ${call.result || 'Unknown'}`,\n  `Start Time: ${call.startTime}`\n].join('\\n');\n\nreturn {\n  json: {\n    subject: `${direction}: ${fromNumber} → ${toNumber}`,\n    type: 'call',\n    done: 1, // Mark as done since it's a completed call\n    due_date: call.startTime?.split('T')[0] || new Date().toISOString().split('T')[0],\n    due_time: call.startTime?.split('T')[1]?.slice(0,5) || '00:00',\n    duration: call.duration ? `${Math.floor(call.duration/3600)}:${String(Math.floor((call.duration%3600)/60)).padStart(2,'0')}:${String(call.duration%60).padStart(2,'0')}` : '00:00:00',\n    note: note,\n    // Store original data for reference\n    _ringcentral_id: call.id,\n    _ringcentral_session: call.sessionId\n  }\n};"
+      }
+    },
+    {
+      "id": "create-activity",
+      "name": "Create PipeDrive Activity",
+      "type": "n8n-nodes-base.pipedrive",
+      "typeVersion": 1,
+      "position": [1320, -60],
+      "parameters": {
+        "resource": "activity",
+        "operation": "create",
+        "subject": "={{ $json.subject }}",
+        "type": "call",
+        "additionalFields": {
+          "done": "={{ $json.done }}",
+          "due_date": "={{ $json.due_date }}",
+          "due_time": "={{ $json.due_time }}",
+          "duration": "={{ $json.duration }}",
+          "note": "={{ $json.note }}"
+        }
+      },
+      "credentials": {
+        "pipedriveApi": {
+          "id": "pipedrive-api",
+          "name": "PipeDrive API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Every 15 Minutes": {
+      "main": [[{"node": "Get RingCentral Token", "type": "main", "index": 0}]]
+    },
+    "Get RingCentral Token": {
+      "main": [[{"node": "Fetch Call Log", "type": "main", "index": 0}]]
+    },
+    "Fetch Call Log": {
+      "main": [[{"node": "Has Records?", "type": "main", "index": 0}]]
+    },
+    "Has Records?": {
+      "main": [
+        [{"node": "Split Calls", "type": "main", "index": 0}],
+        [{"node": "No Calls", "type": "main", "index": 0}]
+      ]
+    },
+    "Split Calls": {
+      "main": [[{"node": "Transform to PipeDrive", "type": "main", "index": 0}]]
+    },
+    "Transform to PipeDrive": {
+      "main": [[{"node": "Create PipeDrive Activity", "type": "main", "index": 0}]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "pinData": {}
+}
