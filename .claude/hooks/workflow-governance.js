@@ -231,7 +231,8 @@ New workflow will be tagged as DEV phase.`
   // No similar workflows - proceed with DEV tag reminder
   return {
     continue: true,
-    systemMessage: `📋 GOVERNANCE: No similar workflows found. New workflow "${name}" will be auto-tagged as DEV phase.`
+    systemMessage: `📋 GOVERNANCE: No similar workflows found. New workflow "${name}" will be auto-tagged as DEV phase.
+Remember: Workflows without phase tags are grounds for archival review.`
   };
 }
 
@@ -251,10 +252,13 @@ async function handlePreUpdate(toolInput) {
   logHook('governance', 'Pre-update check', { workflowId, name, phase });
   
   if (phase === null) {
-    // Not tracked - allow but register as DEV
+    // Not tracked - WARN and suggest archival triage
     return {
       continue: true,
-      systemMessage: `📋 GOVERNANCE: Workflow not tracked. Will register as DEV phase after update.`
+      systemMessage: `⚠️ GOVERNANCE: Workflow "${name}" is UNTAGGED (not in governance.yaml).
+Untagged workflows are grounds for archival review.
+ACTION REQUIRED: After this update, add workflow to governance.yaml with appropriate phase.
+If this is active work, assign DEV phase. If deprecated, assign ARCHIVED.`
     };
   }
   
