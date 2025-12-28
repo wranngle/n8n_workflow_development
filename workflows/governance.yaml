@@ -1,0 +1,142 @@
+# Workflow Governance Configuration
+# ==================================
+# 
+# DEPLOYMENT PHASES:
+#   DEV      - Development, freely modifiable
+#   ALPHA    - Early testing, clone-only
+#   BETA     - User testing, clone-only
+#   GA       - General availability, clone-only
+#   PROD     - Production, clone-only
+#   ARCHIVED - Deprecated, read-only
+#
+# RULES:
+#   - Deletion is BLOCKED (archive instead)
+#   - Only DEV phase can be modified
+#   - ALPHA/BETA/GA/PROD can be cloned but not modified
+#   - New workflows auto-tagged as DEV
+#   - Untagged workflows should be triaged
+
+version: "1.0"
+last_updated: "2025-12-27"
+
+settings:
+  deletion_allowed: false
+  default_phase: DEV
+  require_phase_tag: true
+  similarity_threshold: 40  # Percentage for "similar" warning
+  clone_threshold: 70       # Percentage for "strongly suggest clone"
+
+# Phase definitions
+phases:
+  DEV:
+    description: "Development - active work in progress"
+    color: "#4CAF50"  # Green
+    modifiable: true
+    deletable: false
+    can_promote_to: [ALPHA]
+    
+  ALPHA:
+    description: "Alpha - early internal testing"
+    color: "#FFC107"  # Amber
+    modifiable: false
+    deletable: false
+    can_promote_to: [BETA]
+    can_demote_to: [DEV]
+    
+  BETA:
+    description: "Beta - external/user testing"
+    color: "#FF9800"  # Orange
+    modifiable: false
+    deletable: false
+    can_promote_to: [GA]
+    can_demote_to: [ALPHA]
+    
+  GA:
+    description: "General Availability - stable release"
+    color: "#2196F3"  # Blue
+    modifiable: false
+    deletable: false
+    can_promote_to: [PROD]
+    can_demote_to: [BETA]
+    
+  PROD:
+    description: "Production - live customer-facing"
+    color: "#9C27B0"  # Purple
+    modifiable: false
+    deletable: false
+    can_promote_to: []
+    can_demote_to: [GA]
+    
+  ARCHIVED:
+    description: "Archived - deprecated, kept for reference"
+    color: "#757575"  # Gray
+    modifiable: false
+    deletable: false
+    can_promote_to: []
+    can_demote_to: []
+
+# Tracked workflows with their current phase
+# Format: n8n_workflow_id: { name, phase, created, modified, history }
+workflows:
+  # Voice AI Agents - Production Pipeline
+  "5eowJIoZFZOSG85m":
+    name: "elevenlabs-twilio-client-data"
+    phase: PROD
+    description: "ElevenLabs outbound calling with client initiation data"
+    created: "2025-12-26T00:00:00Z"
+    modified: "2025-12-27T00:00:00Z"
+    history:
+      - action: created
+        phase: DEV
+        timestamp: "2025-12-26T00:00:00Z"
+      - action: promoted
+        phase: PROD
+        timestamp: "2025-12-27T00:00:00Z"
+        
+  "NcP4oEeS3xolYXzC":
+    name: "elevenlabs-twilio-bulletproof"
+    phase: GA
+    description: "Production-ready outbound calling with retry logic"
+    created: "2025-12-27T00:00:00Z"
+    modified: "2025-12-27T00:00:00Z"
+    history:
+      - action: created
+        phase: DEV
+        timestamp: "2025-12-27T00:00:00Z"
+      - action: promoted
+        phase: GA
+        timestamp: "2025-12-27T00:00:00Z"
+        
+  "qQmGqBM1pe4QUI05":
+    name: "pipedrive-lead-caller"
+    phase: ALPHA
+    description: "Auto-call new Pipedrive leads via bulletproof workflow"
+    created: "2025-12-27T00:00:00Z"
+    modified: "2025-12-27T00:00:00Z"
+    history:
+      - action: created
+        phase: DEV
+        timestamp: "2025-12-27T00:00:00Z"
+      - action: promoted
+        phase: ALPHA
+        timestamp: "2025-12-27T00:00:00Z"
+        
+  "cEORduJCqCVDOKce":
+    name: "elevenlabs-call-completed"
+    phase: GA
+    description: "Process post-call webhooks and update CRM"
+    created: "2025-12-27T00:00:00Z"
+    modified: "2025-12-27T00:00:00Z"
+    history:
+      - action: created
+        phase: DEV
+        timestamp: "2025-12-27T00:00:00Z"
+      - action: promoted
+        phase: GA
+        timestamp: "2025-12-27T00:00:00Z"
+
+# Archive of deprecated workflows (kept for audit trail)
+archive: []
+
+# Pending triage - workflows detected without phase tags
+untracked: []

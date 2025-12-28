@@ -78,6 +78,74 @@ This skill is the **SINGLE SOURCE OF TRUTH** for all n8n workflow development. I
 
 ---
 
+## WORKFLOW GOVERNANCE SYSTEM (v1.0)
+
+**Anti-pollution hygiene system for n8n workflows.**
+
+### Core Principles
+
+| Rule | Description |
+|------|-------------|
+| **No Deletion** | Deletion is BLOCKED. Use archiving instead. |
+| **Phase Tags** | All workflows must have a deployment phase tag |
+| **DEV Only Edits** | Only DEV phase workflows can be modified |
+| **Clone Protected** | ALPHA/BETA/GA/PROD can be cloned, not edited |
+| **Search First** | Before creating, check for similar existing workflows |
+
+### Deployment Phases
+
+```
+DEV → ALPHA → BETA → GA → PROD
+  ↓
+ARCHIVED (deprecated, read-only)
+```
+
+| Phase | Modifiable | Description |
+|-------|------------|-------------|
+| `DEV` | ✅ Yes | Active development |
+| `ALPHA` | ❌ Clone only | Early internal testing |
+| `BETA` | ❌ Clone only | User testing |
+| `GA` | ❌ Clone only | General availability |
+| `PROD` | ❌ Clone only | Production, customer-facing |
+| `ARCHIVED` | ❌ Read only | Deprecated, kept for reference |
+
+### Governance Files
+
+| File | Purpose |
+|------|---------|
+| `workflows/governance.yaml` | Phase assignments and history |
+| `workflows/registry.yaml` | Workflow metadata and relationships |
+| `.claude/hooks/workflow-governance.js` | Enforcement hook |
+
+### Hook Behavior
+
+**PreToolUse: n8n_create_workflow**
+- Searches for similar existing workflows
+- If ≥70% match: Strongly suggests cloning
+- If ≥40% match: Lists similar workflows
+- New workflows auto-tagged as DEV
+
+**PreToolUse: n8n_update_***
+- Checks workflow phase
+- BLOCKS if phase is ALPHA/BETA/GA/PROD
+- Allows only DEV phase modifications
+
+**PreToolUse: n8n_delete_workflow**
+- ALWAYS BLOCKS deletion
+- Suggests archiving instead
+
+**PostToolUse: n8n_create_workflow**
+- Registers new workflow in governance.yaml as DEV
+
+### Phase Promotion
+
+To promote a workflow (e.g., DEV → ALPHA):
+1. Edit `workflows/governance.yaml`
+2. Update the `phase` field
+3. Add entry to `history` array
+
+---
+
 ## Philosophy: The Mechanic's Garage
 
 Think of this folder as a master mechanic's garage with decades of specialized tools. Every tool has its place, every workflow request has a protocol.

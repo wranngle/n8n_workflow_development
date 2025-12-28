@@ -13,8 +13,13 @@
     ],
     "PreToolUse": [
       {
-        "matcher": "mcp__n8n-mcp__n8n_create_workflow|mcp__n8n-mcp__n8n_update_full_workflow",
+        "matcher": "mcp__n8n-mcp__n8n_create_workflow",
         "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/workflow-governance.js",
+            "timeout": 10
+          },
           {
             "type": "command",
             "command": "node .claude/hooks/if-node-warning.js",
@@ -23,6 +28,36 @@
           {
             "type": "command",
             "command": "node .claude/hooks/pre-deploy-check.js",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__n8n-mcp__n8n_update_full_workflow|mcp__n8n-mcp__n8n_update_partial_workflow",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/workflow-governance.js",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "node .claude/hooks/if-node-warning.js",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "node .claude/hooks/pre-deploy-check.js",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__n8n-mcp__n8n_delete_workflow",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/workflow-governance.js",
             "timeout": 10
           }
         ]
@@ -40,7 +75,22 @@
     ],
     "PostToolUse": [
       {
-        "matcher": "mcp__n8n-mcp__n8n_create_workflow|mcp__n8n-mcp__n8n_update_full_workflow",
+        "matcher": "mcp__n8n-mcp__n8n_create_workflow",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/workflow-governance.js",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "node .claude/hooks/post-deploy-log.js",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__n8n-mcp__n8n_update_full_workflow|mcp__n8n-mcp__n8n_update_partial_workflow",
         "hooks": [
           {
             "type": "command",
