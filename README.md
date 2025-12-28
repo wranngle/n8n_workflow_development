@@ -255,6 +255,91 @@ This is a personal workflow development toolkit. If you find it useful:
 3. Update the knowledge bases with your channels/communities
 4. Share improvements via pull requests
 
+## 🔬 Technical Research Library
+
+The `context/technical-research/` folder contains structured research reports for integration estimation. These reports are consumed by the `ai_sales_engineering` pipeline to enrich project plans with:
+
+- Complexity scores and effort tiers
+- Risk factors and mitigations
+- Native n8n node availability
+- Source citations with inline footnotes
+
+### Structure
+
+```
+context/technical-research/
+├── library-index.json              # Master index (lookup by integration)
+├── sync-ringcentral-calls-to-pipedrive.md
+├── hubspot-to-slack-notifications.md
+└── ...
+```
+
+### Generating Research Reports
+
+Use the **technical-researcher** agent to create new research:
+
+```bash
+# In Claude Code, invoke the agent
+# /technical-research "sync Shopify orders to NetSuite"
+```
+
+The agent outputs:
+1. Markdown research report saved to `context/technical-research/`
+2. Updated `library-index.json` with integration lookup entries
+3. Complexity score, effort tier, and risk assessment
+
+### Consuming Research
+
+The `ai_sales_engineering` pipeline automatically reads from this library:
+
+```javascript
+// In ai_sales_engineering/lib/integration_research.js
+const research = getCachedResearch("ringcentral");
+// Returns: { complexity: { score: 6, tier: "moderate" }, ... }
+```
+
+See `ai_sales_engineering/CLAUDE.md` for full integration documentation.
+
+---
+
+## 🔗 Related Repositories
+
+This toolkit integrates with the Wranngle sales/proposal ecosystem:
+
+| Repository | Purpose | Data Flow |
+|------------|---------|-----------|
+| **ai_sales_engineering** | Project plan generation | **Consumes** research library |
+| **wranngle-proposal-generator** | 2-page proposal generation | Consumes project plans |
+| **ai_audit_report** | Traffic Light Reports | Feeds into proposals |
+
+### Integration Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                n8n_workflow_development                      │
+│  ┌────────────────────────────────────────────────────────┐ │
+│  │  context/technical-research/                           │ │
+│  │  ├── library-index.json                                │ │
+│  │  └── {integration}-research.md                         │ │
+│  └───────────────────────┬────────────────────────────────┘ │
+│                          │                                   │
+│  ┌───────────────────────┴────────────────────────────────┐ │
+│  │  .claude/agents/technical-researcher.md                │ │
+│  │  (Generates research reports → writes to library)      │ │
+│  └────────────────────────────────────────────────────────┘ │
+└──────────────────────────┬──────────────────────────────────┘
+                           │ research library
+                           ▼
+┌─────────────────────────────────────────────────────────────┐
+│                ai_sales_engineering                          │
+│  ├── lib/integration_research.js (reads library)            │
+│  ├── lib/citations.js (formats footnotes)                   │
+│  └── Pipeline Stage 2: Integration Research                 │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
 ## 📄 License
 
 MIT License - see LICENSE file for details

@@ -1,0 +1,24 @@
+{
+  "mcpServers": {
+    "n8n-mcp": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "n8n-mcp"
+      ],
+      "env": {
+        "N8N_API_URL": "https://n8n.atgfw.com",
+        "N8N_API_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmMjUxMmRkMS0wOTk0LTRjN2YtYWNmMS0wZWY4NDFhZjNhNjYiLCJpc3MiOiJuOG4iLCJhdWQiOiJwdWJsaWMtYXBpIiwiaWF0IjoxNzY2NDYwOTgzLCJleHAiOjE3NzQxNTIwMDB9.SyA7JvtVkYwzGQM3GJJVumG_PVQK4w3SbEFuoTsg16g"
+      }
+    },
+    "youtube": {
+      "command": "node",
+      "args": [
+        "D:/Things/Work/Wranngle/n8n_workflow_development/youtube-mcp-server/dist/index.js"
+      ],
+      "env": {
+        "YOUTUBE_API_KEY": "AIzaSyCdWJSetVG7EC22aP38gutC8NJ12QVP6kA"
+      }
+    }
+  }
+}

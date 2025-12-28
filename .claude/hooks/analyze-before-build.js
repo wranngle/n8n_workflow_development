@@ -25,7 +25,10 @@ function analyzeWorkflow(workflowJson) {
     patterns: []
   };
   
-  if (!workflowJson.nodes) return analysis;
+  if (!workflowJson.nodes) {
+    analysis.nodeTypes = []; // Convert Set to Array for JSON serialization
+    return analysis;
+  }
   
   const nodes = workflowJson.nodes;
   analysis.nodeCount = nodes.length;
@@ -80,11 +83,11 @@ function analyzeWorkflow(workflowJson) {
     });
   }
   
+  // Convert Set to Array for JSON serialization (must do before identifyPatterns)
+  analysis.nodeTypes = Array.from(analysis.nodeTypes);
+
   // Identify patterns
   analysis.patterns = identifyPatterns(analysis);
-  
-  // Convert Set to Array for JSON serialization
-  analysis.nodeTypes = Array.from(analysis.nodeTypes);
   
   return analysis;
 }
@@ -130,10 +133,11 @@ function identifyPatterns(analysis) {
     patterns.push('conditional-branching');
   }
   
-  // AI/LLM pattern
-  if (analysis.nodeTypes.some(t => 
-    t.includes('openai') || t.includes('langchain') || t.includes('anthropic')
-  )) {
+  // AI/LLM pattern (case-insensitive)
+  if (analysis.nodeTypes.some(t => {
+    const lower = t.toLowerCase();
+    return lower.includes('openai') || lower.includes('langchain') || lower.includes('anthropic');
+  })) {
     patterns.push('ai-integration');
   }
   

@@ -1,0 +1,226 @@
+{
+  "name": "Voice Agent Tester - Automated Simulation",
+  "nodes": [
+    {
+      "id": "trigger",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [0, 300],
+      "parameters": {}
+    },
+    {
+      "id": "schedule",
+      "name": "Daily Test Schedule",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 500],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 24
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "test-scenarios",
+      "name": "Test Scenarios",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [220, 400],
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "=[\n  {\n    \"id\": \"happy-path-booking\",\n    \"name\": \"Happy Path - User Books Demo\",\n    \"agent_id\": \"agent_8001kdgp7qbyf4wvhs540be78vew\",\n    \"simulated_user_prompt\": \"You are calling to learn about AI voice agents for your dental practice. You are interested and when offered, you agree to receive an SMS with the booking link. Your name is Dr. Smith.\",\n    \"expected_tool_calls\": [\"send_sms\"],\n    \"evaluation_criteria\": [\n      {\n        \"id\": \"collected_name\",\n        \"name\": \"Collected caller name\",\n        \"prompt\": \"The agent asked for and collected the caller's name before sending SMS.\"\n      },\n      {\n        \"id\": \"got_permission\",\n        \"name\": \"Got SMS permission\",\n        \"prompt\": \"The agent explicitly asked for and received permission to send a text message.\"\n      },\n      {\n        \"id\": \"sent_sms\",\n        \"name\": \"SMS tool called\",\n        \"prompt\": \"The agent successfully called the send_sms tool.\"\n      }\n    ]\n  },\n  {\n    \"id\": \"difficult-user\",\n    \"name\": \"Difficult User - Skeptical and Interruptive\",\n    \"agent_id\": \"agent_8001kdgp7qbyf4wvhs540be78vew\",\n    \"simulated_user_prompt\": \"You are very skeptical about AI. You interrupt frequently. You ask tough questions about pricing and want to know if this is a scam. Eventually warm up if the agent handles objections well.\",\n    \"expected_tool_calls\": [],\n    \"evaluation_criteria\": [\n      {\n        \"id\": \"stayed_polite\",\n        \"name\": \"Maintained professionalism\",\n        \"prompt\": \"The agent remained polite and professional despite the difficult caller.\"\n      },\n      {\n        \"id\": \"answered_pricing\",\n        \"name\": \"Answered pricing question\",\n        \"prompt\": \"The agent provided accurate pricing information when asked.\"\n      }\n    ]\n  },\n  {\n    \"id\": \"quick-decline\",\n    \"name\": \"Quick Decline - Not Interested\",\n    \"agent_id\": \"agent_8001kdgp7qbyf4wvhs540be78vew\",\n    \"simulated_user_prompt\": \"You called by accident. Say you're not interested and want to hang up quickly.\",\n    \"expected_tool_calls\": [],\n    \"evaluation_criteria\": [\n      {\n        \"id\": \"graceful_exit\",\n        \"name\": \"Graceful exit\",\n        \"prompt\": \"The agent ended the call politely and professionally when the caller wasn't interested.\"\n      },\n      {\n        \"id\": \"no_pushy_sales\",\n        \"name\": \"Not pushy\",\n        \"prompt\": \"The agent did not aggressively push for a sale when the caller clearly wasn't interested.\"\n      }\n    ]\n  },\n  {\n    \"id\": \"sms-decline\",\n    \"name\": \"SMS Decline - Interested but No Text\",\n    \"agent_id\": \"agent_8001kdgp7qbyf4wvhs540be78vew\",\n    \"simulated_user_prompt\": \"You are interested in AI voice agents but you don't want to receive text messages. Ask for the booking URL verbally instead.\",\n    \"expected_tool_calls\": [],\n    \"evaluation_criteria\": [\n      {\n        \"id\": \"respected_preference\",\n        \"name\": \"Respected no-SMS preference\",\n        \"prompt\": \"The agent respected the caller's preference not to receive SMS.\"\n      },\n      {\n        \"id\": \"offered_alternative\",\n        \"name\": \"Offered alternative\",\n        \"prompt\": \"The agent offered an alternative way to get the booking information.\"\n      }\n    ]\n  }\n]"
+      }
+    },
+    {
+      "id": "loop-scenarios",
+      "name": "Loop Through Scenarios",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [440, 400],
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      }
+    },
+    {
+      "id": "simulate-conversation",
+      "name": "Simulate Conversation",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [660, 400],
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.elevenlabs.io/v1/convai/agents/{{ $json.agent_id }}/simulate-conversation",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"simulation_specification\": {\n    \"simulated_user_config\": {\n      \"prompt\": {\n        \"prompt\": \"{{ $json.simulated_user_prompt }}\",\n        \"llm\": \"gemini-3-flash-preview\",\n        \"temperature\": 0.7\n      }\n    },\n    \"max_turns\": 20\n  },\n  \"extra_evaluation_criteria\": {{ JSON.stringify($json.evaluation_criteria.map(c => ({ id: c.id, name: c.name, conversation_goal_prompt: c.prompt, use_knowledge_base: false }))) }}\n}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": "eR7srDUHDyZLIZgh"
+      }
+    },
+    {
+      "id": "parse-results",
+      "name": "Parse Simulation Results",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [880, 400],
+      "parameters": {
+        "jsCode": "const scenario = $('Loop Through Scenarios').item.json;\nconst result = $input.item.json;\n\n// Extract tool calls from conversation\nconst toolCalls = [];\nif (result.transcript) {\n  for (const turn of result.transcript) {\n    if (turn.tool_calls) {\n      for (const call of turn.tool_calls) {\n        toolCalls.push(call.tool_name || call.name);\n      }\n    }\n  }\n}\n\n// Check expected tools\nconst expectedTools = scenario.expected_tool_calls || [];\nconst missingTools = expectedTools.filter(t => !toolCalls.includes(t));\nconst unexpectedTools = toolCalls.filter(t => !expectedTools.includes(t));\n\n// Tool validation result\nconst toolValidation = {\n  passed: missingTools.length === 0,\n  expected: expectedTools,\n  actual: toolCalls,\n  missing: missingTools,\n  unexpected: unexpectedTools\n};\n\n// Parse evaluation criteria results\nconst evaluations = {};\nlet allPassed = true;\n\nif (result.evaluation?.criteria_results) {\n  for (const [id, data] of Object.entries(result.evaluation.criteria_results)) {\n    evaluations[id] = {\n      passed: data.passed || data.result === 'passed',\n      reasoning: data.reasoning || data.explanation\n    };\n    if (!evaluations[id].passed) allPassed = false;\n  }\n}\n\n// Overall result\nconst overallPassed = toolValidation.passed && allPassed;\n\nreturn {\n  scenario_id: scenario.id,\n  scenario_name: scenario.name,\n  overall_passed: overallPassed,\n  tool_validation: toolValidation,\n  evaluation_results: evaluations,\n  transcript_length: result.transcript?.length || 0,\n  agent_id: scenario.agent_id,\n  timestamp: new Date().toISOString()\n};"
+      }
+    },
+    {
+      "id": "aggregate-results",
+      "name": "Aggregate Results",
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [1100, 400],
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "test_results",
+        "include": "allFieldsExcept"
+      }
+    },
+    {
+      "id": "generate-report",
+      "name": "Generate Test Report",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1320, 400],
+      "parameters": {
+        "jsCode": "const results = $input.item.json.test_results;\n\nconst passed = results.filter(r => r.overall_passed).length;\nconst failed = results.filter(r => !r.overall_passed).length;\nconst total = results.length;\n\nlet report = `# Voice Agent Test Report\\n`;\nreport += `**Run Time:** ${new Date().toISOString()}\\n`;\nreport += `**Agent:** ${results[0]?.agent_id || 'Unknown'}\\n\\n`;\nreport += `## Summary\\n`;\nreport += `- **Total Tests:** ${total}\\n`;\nreport += `- **Passed:** ${passed} ✅\\n`;\nreport += `- **Failed:** ${failed} ❌\\n`;\nreport += `- **Success Rate:** ${Math.round(passed/total*100)}%\\n\\n`;\n\nreport += `## Test Results\\n\\n`;\n\nfor (const result of results) {\n  const status = result.overall_passed ? '✅ PASSED' : '❌ FAILED';\n  report += `### ${result.scenario_name}\\n`;\n  report += `**Status:** ${status}\\n\\n`;\n  \n  // Tool validation\n  report += `**Tool Validation:**\\n`;\n  if (result.tool_validation.passed) {\n    report += `- ✅ All expected tools called\\n`;\n  } else {\n    if (result.tool_validation.missing.length > 0) {\n      report += `- ❌ Missing: ${result.tool_validation.missing.join(', ')}\\n`;\n    }\n  }\n  if (result.tool_validation.actual.length > 0) {\n    report += `- Tools called: ${result.tool_validation.actual.join(', ')}\\n`;\n  }\n  report += `\\n`;\n  \n  // Evaluation criteria\n  if (Object.keys(result.evaluation_results).length > 0) {\n    report += `**Evaluation Criteria:**\\n`;\n    for (const [id, eval_result] of Object.entries(result.evaluation_results)) {\n      const icon = eval_result.passed ? '✅' : '❌';\n      report += `- ${icon} ${id}: ${eval_result.reasoning || 'No reasoning provided'}\\n`;\n    }\n    report += `\\n`;\n  }\n  \n  report += `---\\n\\n`;\n}\n\nreturn {\n  report_markdown: report,\n  summary: {\n    total,\n    passed,\n    failed,\n    success_rate: Math.round(passed/total*100),\n    timestamp: new Date().toISOString()\n  },\n  detailed_results: results\n};"
+      }
+    },
+    {
+      "id": "check-failures",
+      "name": "Any Failures?",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [1540, 400],
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "outputKey": "failures",
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "fail-check",
+                    "leftValue": "={{ $json.summary.failed }}",
+                    "rightValue": 0,
+                    "operator": {
+                      "type": "number",
+                      "operation": "gt"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      }
+    },
+    {
+      "id": "send-alert",
+      "name": "Send Failure Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1760, 300],
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.wranngle.com/webhook/voice-agent-test-alert",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"type\": \"voice_agent_test_failure\",\n  \"summary\": {{ JSON.stringify($json.summary) }},\n  \"report\": {{ JSON.stringify($json.report_markdown) }}\n}"
+      }
+    },
+    {
+      "id": "log-success",
+      "name": "Log Success",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1760, 500],
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"status\": \"all_tests_passed\",\n  \"summary\": {{ JSON.stringify($json.summary) }},\n  \"timestamp\": \"{{ $now.toISO() }}\"\n}"
+      }
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [{"node": "Test Scenarios", "type": "main", "index": 0}]
+      ]
+    },
+    "Daily Test Schedule": {
+      "main": [
+        [{"node": "Test Scenarios", "type": "main", "index": 0}]
+      ]
+    },
+    "Test Scenarios": {
+      "main": [
+        [{"node": "Loop Through Scenarios", "type": "main", "index": 0}]
+      ]
+    },
+    "Loop Through Scenarios": {
+      "main": [
+        [{"node": "Simulate Conversation", "type": "main", "index": 0}],
+        [{"node": "Aggregate Results", "type": "main", "index": 0}]
+      ]
+    },
+    "Simulate Conversation": {
+      "main": [
+        [{"node": "Parse Simulation Results", "type": "main", "index": 0}]
+      ]
+    },
+    "Parse Simulation Results": {
+      "main": [
+        [{"node": "Loop Through Scenarios", "type": "main", "index": 0}]
+      ]
+    },
+    "Aggregate Results": {
+      "main": [
+        [{"node": "Generate Test Report", "type": "main", "index": 0}]
+      ]
+    },
+    "Generate Test Report": {
+      "main": [
+        [{"node": "Any Failures?", "type": "main", "index": 0}]
+      ]
+    },
+    "Any Failures?": {
+      "main": [
+        [{"node": "Send Failure Alert", "type": "main", "index": 0}],
+        [{"node": "Log Success", "type": "main", "index": 0}]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "description": "Automated voice agent testing using ElevenLabs simulate_conversation API. Runs test scenarios without making real phone calls.",
+    "templateCredsSetupCompleted": false
+  }
+}

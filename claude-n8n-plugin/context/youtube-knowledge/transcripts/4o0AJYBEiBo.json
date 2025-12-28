@@ -1,0 +1,9 @@
+{
+  "videoId": "4o0AJYBEiBo",
+  "title": "Only 1% of n8n Builders Know This Node Exists (LangChain Code Node)",
+  "channel": "Bart Slodyczka",
+  "fetchedAt": "2025-12-14T00:00:00Z",
+  "status": "success",
+  "fullText": "In this video, I'm going to be showing you the most customizable AI agent that you will ever see in n8n. I'm not going to be showing you the regular AI agent that you're used to, which is this AI agent here that has an input for a chat model, has some memory input, multiple tool inputs. What I want to show you is the LangChain code node. It's found under AI, other AI nodes, miscellaneous. This node is actually what the AI agent node is built on under the hood - it's n8n-nodes-langchain.agent. LangChain is a framework for building out AI agents. Businesses like Replet and Clana have built their systems on LangChain. The underlying concept is that you have some input, some output, and in between you have a set of actions defined by an LLM that has access to tools - like plugging into Shopify, Zendesk, doing custom actions - and instructions which give the AI agent understanding of a specific task. The key difference between OpenAI Assistants API and LangChain is that OpenAI must run on OpenAI infrastructure, while LangChain is a framework that doesn't have an opinion on which AI model, tools, or custom instructions you use. Using the LangChain code node, you can build teams of agents, run complex workflows, have orchestrator agents that can dynamically rerun tools, check outputs, and do thinking steps like Claude or ChatGPT. You can also plug into LangSmith for reporting - seeing token costs, execution times, and tool call outcomes.",
+  "topics": ["LangChain", "code node", "AI agents", "custom agents", "LangSmith", "orchestration", "advanced n8n"]
+}

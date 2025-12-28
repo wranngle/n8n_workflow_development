@@ -1,0 +1,21 @@
+{
+  "name": "n8n-methodology",
+  "version": "1.1.0",
+  "description": "Comprehensive n8n workflow development methodology with 9 skills, agents, hooks, and MCP server. Includes 25-source research quota enforcement.",
+  "author": {
+    "name": "Wranngle Systems",
+    "url": "https://wranngle.com"
+  },
+  "repository": "https://github.com/wranngle/n8n-methodology-plugin",
+  "license": "MIT",
+  "keywords": ["n8n", "workflow", "automation", "methodology", "mcp"],
+  "mcpServers": {
+    "n8n-methodology": {
+      "command": "node",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/servers/n8n-methodology-mcp/dist/index.js"],
+      "env": {
+        "N8N_METHODOLOGY_ROOT": "${CLAUDE_PLUGIN_ROOT}"
+      }
+    }
+  }
+}

@@ -53,7 +53,10 @@ const WORKFLOW_KEYWORDS = {
   // Strong indicators - definitely workflow related
   strong: [
     'workflow', 'n8n', 'automation', 'automate', 'webhook', 'trigger',
-    'cron', 'schedule', 'scheduled', 'api call', 'http request', 'integration'
+    'cron', 'schedule', 'scheduled', 'api call', 'http request', 'integration',
+    // Twilio-specific strong indicators
+    'twilio', 'send sms', 'send text', 'text message', 'voice call', 'phone call',
+    'whatsapp message', 'mms', 'twiml'
   ],
   // Weak indicators - need multiple or combined with action
   weak: [

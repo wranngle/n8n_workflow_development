@@ -1,3 +1,7 @@
+---
+description: Get n8n node configuration quickly for common use cases
+---
+
 # /quick-node - Rapid Node Configuration
 
 Get node configuration quickly for common use cases.

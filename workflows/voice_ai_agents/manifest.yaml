@@ -1,0 +1,40 @@
+# Voice AI Agents - Business Process Manifest
+# Auto-generated: 2025-12-26
+
+name: voice_ai_agents
+description: >
+  Voice-based AI agent workflows combining speech synthesis,
+  voice cloning, telephony, and conversational AI capabilities.
+
+workflows:
+  elevenlabs-twilio-voiceagent:
+    status: seed
+    description: ElevenLabs voice agent with Twilio SMS/voice integration
+    integrations:
+      - elevenlabs
+      - twilio
+    capabilities:
+      - text-to-speech
+      - voice-cloning
+      - conversational-ai
+      - sms-notifications
+      - inbound-calls
+      - outbound-calls
+    n8n_nodes_required:
+      native:
+        - nodes-base.twilio
+        - nodes-base.twilioTrigger
+        - nodes-base.webhook
+      http_request:
+        - elevenlabs-api
+
+shared_resources:
+  error_handlers: []
+  notification_dispatchers: []
+
+tags:
+  - voice
+  - ai-agent
+  - elevenlabs
+  - twilio
+  - conversational-ai

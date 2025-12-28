@@ -1,0 +1,24 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2025-12-20T00:00:00Z",
+  "description": "Index of technical research reports for integration estimation",
+  "research_files": {
+    "ringcentral-pipedrive": {
+      "file": "sync-ringcentral-calls-to-pipedrive.md",
+      "integrations": ["ringcentral", "pipedrive"],
+      "created_at": "2025-12-20",
+      "complexity_score": 6,
+      "effort_tier": "moderate",
+      "confidence": 0.85
+    }
+  },
+  "integration_lookup": {
+    "ringcentral": ["ringcentral-pipedrive"],
+    "pipedrive": ["ringcentral-pipedrive"]
+  },
+  "stats": {
+    "total_reports": 1,
+    "integrations_covered": 2,
+    "average_confidence": 0.85
+  }
+}

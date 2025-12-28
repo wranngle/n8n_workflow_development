@@ -1,3 +1,7 @@
+---
+description: Analyze n8n workflow JSON structure to find reusable patterns
+---
+
 # /analyze-workflow - Deep Workflow Content Analysis
 
 Analyze actual workflow JSON structure to find reusable patterns, not just filename matching.

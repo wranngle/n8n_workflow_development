@@ -90,6 +90,47 @@ Think of this folder as a master mechanic's garage with decades of specialized t
 5. The Zie619 community library (4,343 workflows)
 6. n8n-MCP template database (2,709 templates)
 
+**Quality Philosophy**: *"If there's a feature, make it impeccable."*
+- Don't settle for "can't be done" - research thoroughly
+- Make comprehensive, production-ready implementations
+- Test every branch and scenario
+- Embed error handling and retry logic from the start
+
+---
+
+## MANDATORY RESEARCH QUOTA: 25 Sources
+
+**For any above-trivial workflow design, API question, or diagnostic query:**
+
+| Complexity | Minimum Sources | Diversity Requirement |
+|------------|-----------------|----------------------|
+| Trivial | 5 | ≥2 source types |
+| Moderate+ | **25** | ≥4 source types |
+
+### Source Types (each unique item counts as 1):
+- n8n node documentation
+- n8n templates (2,709 available)
+- YouTube tutorials (10,279 indexed)
+- Discord Q&A (2,930 indexed)
+- Community workflows (4,343 available)
+- API documentation (Context7, Ref-tools, Exa)
+- Reddit threads
+- WebSearch/WebFetch results
+
+### Tracking Requirement
+
+Every research phase MUST include:
+```markdown
+## Research Sources ({N}/25 minimum)
+| # | Type | Source | Relevance |
+|---|------|--------|-----------|
+| 1 | YouTube | "Webhook Tutorial" | Pattern |
+| 2 | Template | #1234 | Structure |
+| ... | ... | ... | ... |
+```
+
+**This quota ensures comprehensive research before building.**
+
 ---
 
 ## TOOL REGISTRY: The Garage Inventory
@@ -213,6 +254,8 @@ n8n_workflow_development/
 │   └── search/             # Search utilities
 ├── scripts/                # Utility scripts
 ├── config/                 # Configuration files
+├── docs/                   # Project documentation
+│   └── n8n-instance-mcp.md # Instance MCP setup guide
 ├── CLAUDE.md               # This file (architecture reference)
 └── package.json            # Dependencies
 ```
@@ -221,7 +264,7 @@ n8n_workflow_development/
 
 ## SKILL SYSTEM
 
-### 8 Installed Skills (Auto-Activating)
+### 9 Installed Skills (Auto-Activating)
 
 | Skill | Triggers When | Purpose |
 |-------|---------------|---------|
@@ -233,6 +276,7 @@ n8n_workflow_development/
 | **n8n-node-configuration** | Configuring nodes | Operation-aware config |
 | **n8n-code-javascript** | Writing Code nodes | Data access, return formats |
 | **n8n-code-python** | Python Code nodes | Standard library only |
+| **twilio-integration** | SMS/Voice/WhatsApp | Twilio node config, E.164 format, error codes |
 
 ### Skill Invocation Map
 
@@ -243,6 +287,7 @@ The master skill (`n8n-workflow-dev`) invokes sub-skills at specific steps:
 | 8 | Always | `n8n-workflow-patterns` |
 | 11 | Always | `n8n-node-configuration` |
 | 11 | Using MCP tools | `n8n-mcp-tools-expert` |
+| 11 | Twilio nodes detected | `twilio-integration` |
 | 12 | Has expressions | `n8n-expression-syntax` |
 | 13 | Has Code nodes | `n8n-code-javascript` |
 | 15 | Always | `n8n-validation-expert` |
@@ -283,24 +328,167 @@ n8n_update_partial_workflow({
 })
 ```
 
+### Credential Management (MANDATORY)
+**See full directive: `.claude/directives/credential-management.md`**
+
+When ANY 3rd-party API key is provided:
+1. **Store immediately** in memory system (`mcp__memory__create_entities`)
+2. **Create .env file** in `workflows/{project}/env/.env.{service}`
+3. **Create n8n credential** via `POST /api/v1/credentials`
+4. **Update workflow** to reference credential ID
+
+Known service headers:
+| Service | Header | n8n Credential ID |
+|---------|--------|-------------------|
+| ElevenLabs | xi-api-key | `eR7srDUHDyZLIZgh` |
+
+Before building workflows, **ALWAYS** check memory for existing credentials.
+
+---
+
+## THIRD-PARTY INTEGRATION FRAMEWORK
+
+When a 3rd-party service is implicated in an n8n workflow, this framework bootstraps a comprehensive integration layer—mirroring the n8n development supergateway itself.
+
+**Location**: `.claude/directives/integrations/FRAMEWORK.md`
+
+### Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    THIRD-PARTY INTEGRATION FRAMEWORK                         │
+│                                                                              │
+│  PHASE 0: DETECTION    → Check if integration exists                        │
+│  PHASE 1: DISCOVERY    → Inventory MCP tools (mcp__{service}__*)            │
+│  PHASE 2: KNOWLEDGE    → Aggregate docs, tutorials, patterns                │
+│  PHASE 3: CREDENTIALS  → Check memory, env files, create if needed         │
+│  PHASE 4: PATTERNS     → Extract workflow patterns, failure modes           │
+│  PHASE 5: BUILD        → Proceed with n8n workflow development              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Directory Structure
+
+```
+.claude/directives/integrations/{service}/
+├── manifest.yaml           # Service metadata, capabilities, credentials
+├── mcp-tools.md           # MCP tool inventory with examples
+├── knowledge-index.json   # Aggregated research sources
+├── credential-store.yaml  # Credential locations (no secrets)
+├── patterns/              # Reusable workflow patterns
+└── failure-modes.md       # Known issues and resolutions
+```
+
+### Integrated Services
+
+| Service | Status | MCP Server | Docs Coverage | Patterns |
+|---------|--------|------------|---------------|----------|
+| **ElevenLabs** | ✅ Complete | ✅ 24 tools | Comprehensive | 5+ |
+| **Twilio** | ✅ Complete | ❌ None | Comprehensive | 4+ |
+| OpenAI | 📋 Planned | ❌ None | - | - |
+| Pipedrive | 📋 Planned | ❌ None | - | - |
+
+### ElevenLabs Integration (Flagship)
+
+**Location**: `.claude/directives/integrations/elevenlabs/`
+
+| Resource | Purpose |
+|----------|---------|
+| `manifest.yaml` | 24 MCP tools, models, voices, agents, webhooks |
+| `mcp-tools.md` | Complete tool reference with examples |
+| `knowledge-index.json` | 47+ sources (YouTube, Discord, docs, workflows) |
+| `patterns/outbound-call.json` | Client data injection pattern |
+
+**Quick Access**:
+```javascript
+// Voice agents
+mcp__elevenlabs-mcp__list_agents()
+mcp__elevenlabs-mcp__get_agent({ agent_id: "agent_xyz" })
+
+// Conversations
+mcp__elevenlabs-mcp__list_conversations({ agent_id: "agent_xyz" })
+mcp__elevenlabs-mcp__get_conversation({ conversation_id: "conv_abc" })
+
+// Telephony
+mcp__elevenlabs-mcp__make_outbound_call({
+  agent_id: "agent_5701kdgf9s4vfe9rhe68ntjrms9g",
+  agent_phone_number_id: "phnum_1901kdgev877fep99ex5fc5abb3m",
+  to_number: "+15551234567"
+})
+```
+
+### Twilio Integration (SMS/Voice)
+
+**Location**: `.claude/skills/twilio-integration/`
+
+| Resource | Purpose |
+|----------|---------|
+| `SKILL.md` | Complete Twilio skill with node config, error codes, patterns |
+| `error-codes.md` | Quick-lookup table for all Twilio error codes |
+
+**Context7 Knowledge Sources**:
+| Library ID | Purpose | Benchmark |
+|------------|---------|-----------|
+| `/twilio/twilio-node` | Node.js SDK | 87.9 |
+| `/websites/twilio_voice` | Voice/TwiML (8,071 snippets) | 83.4 |
+| `/llmstxt/twilio_llms_txt` | General API | 42.6 |
+
+**Quick Access**:
+```javascript
+// n8n Twilio node essentials
+mcp__n8n-mcp__get_node_essentials({ nodeType: "nodes-base.twilio" })
+
+// Context7 documentation
+mcp__context7__get-library-docs({
+  context7CompatibleLibraryID: "/twilio/twilio-node",
+  topic: "sms sending"
+})
+```
+
+**Phone Format (CRITICAL)**: Always E.164 format: `+14155551234`
+
+### Incremental Update Protocol
+
+**CRITICAL**: Never reinvent the wheel. When updating an existing integration:
+
+1. **READ existing manifest.yaml first**
+2. **MERGE new findings** with existing data
+3. **PRESERVE** all working patterns and credentials
+4. **ADD** new knowledge without replacing
+5. **UPDATE** last_updated timestamp
+
 ---
 
 ## INSTANCE CONFIGURATION
 
 ```yaml
 n8n_instance:
-  url: [CONFIGURE IN ENV]
+  url: https://n8n.wranngle.com
   api_key: [CONFIGURE IN ENV]
+  mcp_endpoint: https://n8n.wranngle.com/mcp-server/http
+  mcp_token: [CONFIGURED - see .env]
 
 mcp_servers:
-  # CONNECTED
-  n8n-mcp: ✅ (528 nodes, 2709 templates)
+  # CONNECTED - WORKFLOW BUILDING
+  n8n-mcp: ✅ (528 nodes, 2709 templates, validation)
+
+  # CONNECTED - LIVE INSTANCE ACCESS
+  n8n-instance: ✅ (configured in ~/.claude.json via supergateway)
+  # Tools: list_workflows, get_workflow, execute_workflow, search_workflows
+  # Endpoint: https://n8n.wranngle.com/mcp-server/http
+
+  # CONNECTED - PORTABLE METHODOLOGY
+  n8n-methodology: ✅ (exposes this project's methodology as MCP tools)
+  # Tools: get_methodology, get_skill, list_skills, search_knowledge, get_workflow_pattern
+  # Use from ANY project after restart
+
+  # CONNECTED - RESEARCH & DOCS
   exa: ✅ (web search, deep research)
   context7: ✅ (real-time docs)
   ref-tools: ✅ (doc search)
   playwright: ✅ (web automation)
   memory: ✅ (knowledge graph)
-  desktop-commander: ✅ (file ops)
+  elevenlabs-mcp: ✅ (voice AI, TTS, agents)
 
   # NOT CONNECTED (use fallbacks)
   youtube: ❌ - use local index + Exa crawl
@@ -313,6 +501,15 @@ knowledge_bases:
   community: 4,343 workflows
   templates: 2,709 official templates
 ```
+
+### Two Complementary n8n MCP Servers
+
+| Server | Purpose | Data Source |
+|--------|---------|-------------|
+| **n8n-mcp** (npm) | Node schemas, templates, validation | Static database |
+| **n8n-instance** (HTTP) | Live workflows, execution, runtime | Your n8n instance |
+
+**Use both together**: n8n-mcp for building workflows, n8n-instance for deploying/executing.
 
 ---
 
@@ -329,6 +526,7 @@ knowledge_bases:
 | Feature | Requirement |
 |---------|-------------|
 | n8n Instance Access | N8N_API_KEY required |
+| n8n Instance MCP | N8N_MCP_TOKEN required (separate from API key) |
 | Discord Live Search | DISCORD_TOKEN required |
 | YouTube Transcripts | Pre-cached available offline |
 
@@ -342,6 +540,58 @@ If hooks don't fire, check `.claude/logs/hooks.log` for execution traces.
 1. **Session Continuation**: SessionStart hook only fires on fresh sessions
 2. **Working Directory**: Hooks use relative paths, run from project root
 3. **Permissions**: Check `.claude/settings.json` permissions block
+
+---
+
+## SELF-CORRECTING WORKFLOW ENGINE (ULTRATHINK)
+
+This repository implements an autonomous meta-cognitive supervision layer for deterministic perfection.
+
+### Ultrathink Execution Loop
+```
+1. EXECUTE   → Perform the assigned task
+2. OBSERVE   → Read execution logs, output code, screenshots (one page at a time)
+3. ANALYZE   → Collect comprehensive list of flaws as checklist
+4. REMEDIATE → Self-fix the identified flaws
+5. VERIFY    → Confirm fixes resolved the issues
+6. REPEAT    → Continue until state is PERFECTION
+7. AUTOMATE  → Implement self-healing mechanisms for future prevention
+```
+
+### Supervision Layer Indicators
+Monitor execution for these negative indicators and log immediately:
+| Type | Description |
+|------|-------------|
+| FRICTION | Unnecessary complexity or resistance |
+| INEFFICIENCY | Wasted steps or resources |
+| WASTE | Redundant operations |
+| CORRUPTION | Data integrity issues |
+| MISTAKES | Errors in logic or execution |
+
+### Automatic Research Protocol
+**Triggers after 2 occurrences of the same issue:**
+1. Block all locally directed troubleshooting attempts
+2. Perform mandatory internet research (GitHub, docs, forums)
+3. Find "the wheel that has already been invented"
+4. Implement solution programmatically into the pipeline
+5. Document in `context/known-bugs/` for future prevention
+
+### Supervision Log Location
+`.claude/logs/supervision-log.jsonl` - JSONL format with entries:
+```json
+{"timestamp":"...","type":"MISTAKE","description":"...","count":N,"action":"RESEARCH_PROTOCOL","resolved":true}
+```
+
+### Self-Healing Hooks
+| Hook | Purpose |
+|------|---------|
+| `if-node-warning.js` | Blocks IF node usage, suggests Switch node (known bug) |
+| `pre-deploy-check.js` | Validates before deployment |
+| `post-deploy-log.js` | Logs deployments for audit trail |
+
+### Known Bug Registry
+`context/known-bugs/` contains documented issues with canonical solutions:
+- `n8n-if-node-v2.md` - IF node routing bug → Use Switch node
 
 ---
 
@@ -368,5 +618,5 @@ Actions: `create`, `update`, `fix`, `deploy`, `stage`, `archive`
 
 ---
 
-*Last Updated: 2025-12-17*
-*Architecture Version: 2.0 - Hook-Driven Unified Protocol*
+*Last Updated: 2025-12-27*
+*Architecture Version: 2.3 - Third-Party Integration Framework + Ultrathink Protocol*

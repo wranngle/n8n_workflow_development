@@ -1,0 +1,46 @@
+{
+  "version": "1.1.0",
+  "last_updated": "2025-12-27T00:00:00Z",
+  "description": "Index of technical research reports for integration estimation",
+  "research_files": {
+    "ringcentral-pipedrive": {
+      "file": "sync-ringcentral-calls-to-pipedrive.md",
+      "integrations": ["ringcentral", "pipedrive"],
+      "created_at": "2025-12-20",
+      "complexity_score": 6,
+      "effort_tier": "moderate",
+      "confidence": 0.85
+    },
+    "orthopedic-patient-intake": {
+      "file": "orthopedic-patient-intake-scheduling.md",
+      "integrations": ["athenahealth", "ringcentral", "gmail", "square", "jotform", "twilio", "insurance"],
+      "created_at": "2025-12-27",
+      "complexity_score": 7,
+      "effort_tier": "complex",
+      "confidence": 0.85,
+      "business_process": "Patient Pre-Registration, Insurance Verification, Smart Scheduling",
+      "base_hours": 120
+    }
+  },
+  "integration_lookup": {
+    "ringcentral": ["ringcentral-pipedrive", "orthopedic-patient-intake"],
+    "pipedrive": ["ringcentral-pipedrive"],
+    "athenahealth": ["orthopedic-patient-intake"],
+    "ehr": ["orthopedic-patient-intake"],
+    "gmail": ["orthopedic-patient-intake"],
+    "google": ["orthopedic-patient-intake"],
+    "square": ["orthopedic-patient-intake"],
+    "jotform": ["orthopedic-patient-intake"],
+    "twilio": ["orthopedic-patient-intake"],
+    "sms": ["orthopedic-patient-intake"],
+    "insurance": ["orthopedic-patient-intake"],
+    "healthcare": ["orthopedic-patient-intake"],
+    "medical": ["orthopedic-patient-intake"],
+    "hipaa": ["orthopedic-patient-intake"]
+  },
+  "stats": {
+    "total_reports": 2,
+    "integrations_covered": 10,
+    "average_confidence": 0.85
+  }
+}

@@ -1,3 +1,7 @@
+---
+description: Convert n8n workflow screenshots into importable JSON
+---
+
 # /screenshot-to-workflow - Reconstruct Workflows from Screenshots
 
 Convert n8n workflow screenshots into production-ready, importable JSON with pixel-perfect accuracy.

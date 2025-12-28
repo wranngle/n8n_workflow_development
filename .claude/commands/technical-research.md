@@ -1,3 +1,7 @@
+---
+description: Research integration requirements for proposal labor estimation
+---
+
 # /technical-research - Integration Research for Proposal Estimation
 
 Research automation/integration requirements from a business process description and output a structured markdown report for proposal labor estimation.

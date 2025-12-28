@@ -1,0 +1,49 @@
+{
+  "meta": {
+    "created": "2025-12-14",
+    "lastUpdated": "2025-12-14",
+    "version": "1.0.0",
+    "description": "Full-text searchable index of transcript content for workflow development research",
+    "totalIndexed": 3,
+    "indexMethod": "keyword extraction + full text"
+  },
+  "searchableContent": [
+    {
+      "videoId": "Zy4cVtHJNvc",
+      "title": "5 Error Handling Techniques for Production n8n Workflows",
+      "channel": "Nate Herk | AI Automation",
+      "keywords": ["error handling", "error trigger", "retry on fail", "fallback LLM", "max tries", "wait between tries", "production", "AI automations", "error workflow", "node settings"],
+      "searchText": "error handling techniques production workflows error trigger retry on fail fallback LLM max tries wait between tries node settings AI automations google gemini open router"
+    },
+    {
+      "videoId": "3FfCRbq3XMs",
+      "title": "n8n Webhook Security: Learn This Before It's Too Late",
+      "channel": "Nate Herk | AI Automation",
+      "keywords": ["webhook", "security", "authentication", "header auth", "basic auth", "JWT", "JSON web token", "API key", "production URL", "protect webhooks"],
+      "searchText": "webhook security authentication header auth basic auth JWT JSON web token API key password username production URL protect webhooks bearer token payload admin access"
+    },
+    {
+      "videoId": "4o0AJYBEiBo",
+      "title": "Only 1% of n8n Builders Know This Node Exists (LangChain Code Node)",
+      "channel": "Bart Slodyczka",
+      "keywords": ["LangChain", "code node", "AI agent", "custom agent", "LangSmith", "orchestration", "tool calling", "memory", "multiple LLMs", "advanced"],
+      "searchText": "langchain code node AI agent custom agent langsmith orchestration tool calling memory multiple LLMs anthropic openai google gemini advanced framework teams of agents thinking steps token costs"
+    }
+  ],
+  "topicIndex": {
+    "error-handling": ["Zy4cVtHJNvc"],
+    "webhook-security": ["3FfCRbq3XMs"],
+    "authentication": ["3FfCRbq3XMs"],
+    "langchain": ["4o0AJYBEiBo"],
+    "advanced-agents": ["4o0AJYBEiBo"],
+    "production": ["Zy4cVtHJNvc", "3FfCRbq3XMs"],
+    "retry-logic": ["Zy4cVtHJNvc"],
+    "jwt": ["3FfCRbq3XMs"],
+    "fallback-llm": ["Zy4cVtHJNvc"],
+    "orchestration": ["4o0AJYBEiBo"]
+  },
+  "usage": {
+    "searchProtocol": "1. Search keywords in searchableContent[].searchText using string matching. 2. Cross-reference with topicIndex for quick topic lookups. 3. Fetch full transcript from transcripts/{videoId}.json for detailed content.",
+    "example": "Query 'webhook authentication' → matches 3FfCRbq3XMs → read transcripts/3FfCRbq3XMs.json for full guidance"
+  }
+}

@@ -1,3 +1,7 @@
+---
+description: Find API documentation for a service using the documentation waterfall
+---
+
 # /lookup-api - Find API Documentation for Integration
 
 Find comprehensive API documentation for a service/integration using the documentation waterfall.
