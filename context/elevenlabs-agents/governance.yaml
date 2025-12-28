@@ -1,0 +1,134 @@
+# ElevenLabs Agent Governance Configuration
+# ==========================================
+# 
+# DEPLOYMENT PHASES:
+#   DEV      - Development, freely modifiable
+#   ALPHA    - Early testing, clone-only
+#   BETA     - User testing, clone-only
+#   GA       - General availability, clone-only
+#   PROD     - Production, clone-only
+#   ARCHIVED - Deprecated, read-only
+#
+# RULES:
+#   - Deletion is discouraged (archive instead)
+#   - Only DEV phase agents can be modified
+#   - ALPHA/BETA/GA/PROD should be cloned, not modified
+#   - New agents auto-tagged as DEV
+#   - Untagged agents should be triaged
+
+version: "1.0"
+last_updated: "2025-12-27"
+
+settings:
+  default_phase: DEV
+  require_phase_tag: true
+  similarity_threshold: 40
+  clone_threshold: 70
+
+# Phase definitions (mirrors workflow governance)
+phases:
+  DEV:
+    description: "Development - active work in progress"
+    color: "#4CAF50"
+    modifiable: true
+    
+  ALPHA:
+    description: "Alpha - early internal testing"
+    color: "#FFC107"
+    modifiable: false
+    can_promote_to: [BETA]
+    
+  BETA:
+    description: "Beta - external/user testing"
+    color: "#FF9800"
+    modifiable: false
+    can_promote_to: [GA]
+    
+  GA:
+    description: "General Availability - stable release"
+    color: "#2196F3"
+    modifiable: false
+    can_promote_to: [PROD]
+    
+  PROD:
+    description: "Production - live customer-facing"
+    color: "#9C27B0"
+    modifiable: false
+    
+  ARCHIVED:
+    description: "Archived - deprecated, kept for reference"
+    color: "#757575"
+    modifiable: false
+
+# Tracked agents with their current phase
+agents:
+  "agent_5701kdgf9s4vfe9rhe68ntjrms9g":
+    name: "Wranngle Lead Qualifier"
+    phase: PROD
+    description: "Production lead qualification agent for commercial pipeline"
+    voice_id: "cgSgspJ2msm6clMCkdW9"
+    phone_number_id: "phnum_1901kdgev877fep99ex5fc5abb3m"
+    created: "2025-12-27T12:57:01Z"
+    modified: "2025-12-27T00:00:00Z"
+    linked_workflows:
+      - elevenlabs-twilio-bulletproof
+      - elevenlabs-call-completed
+      - pipedrive-lead-caller
+    history:
+      - action: created
+        phase: DEV
+        timestamp: "2025-12-27T12:57:01Z"
+      - action: promoted
+        phase: PROD
+        timestamp: "2025-12-27T00:00:00Z"
+        
+  "agent_8001kdgp7qbyf4wvhs540be78vew":
+    name: "Sarah - Wranngle Receptionist"
+    phase: GA
+    description: "Receptionist agent for general inquiries and SMS booking"
+    voice_id: "EXAVITQu4vr4xnSDxMaL"
+    created: "2025-12-27T14:58:13Z"
+    modified: "2025-12-27T00:00:00Z"
+    linked_workflows:
+      - sarah-sms-tool
+    history:
+      - action: created
+        phase: DEV
+        timestamp: "2025-12-27T14:58:13Z"
+      - action: promoted
+        phase: GA
+        timestamp: "2025-12-27T00:00:00Z"
+        
+  "agent_3801kdf7fkhcev8tkhpm92d65jws":
+    name: "Client Data Test Agent"
+    phase: DEV
+    description: "Development agent for testing client data injection"
+    voice_id: "cgSgspJ2msm6clMCkdW9"
+    created: "2025-12-27T01:21:09Z"
+    modified: "2025-12-27T00:00:00Z"
+    linked_workflows:
+      - elevenlabs-twilio-client-data
+    history:
+      - action: created
+        phase: DEV
+        timestamp: "2025-12-27T01:21:09Z"
+
+# Voice inventory for reference
+voices:
+  "cgSgspJ2msm6clMCkdW9":
+    name: "Jessica (Default)"
+    used_by:
+      - agent_5701kdgf9s4vfe9rhe68ntjrms9g
+      - agent_3801kdf7fkhcev8tkhpm92d65jws
+      
+  "EXAVITQu4vr4xnSDxMaL":
+    name: "Sarah"
+    used_by:
+      - agent_8001kdgp7qbyf4wvhs540be78vew
+
+# Phone numbers inventory
+phone_numbers:
+  "phnum_1901kdgev877fep99ex5fc5abb3m":
+    number: "+18882662193"
+    assigned_to: agent_5701kdgf9s4vfe9rhe68ntjrms9g
+    provider: "twilio"

@@ -71,6 +71,16 @@
             "timeout": 5
           }
         ]
+      },
+      {
+        "matcher": "mcp__elevenlabs-mcp__create_agent",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/elevenlabs-agent-governance.js",
+            "timeout": 10
+          }
+        ]
       }
     ],
     "PostToolUse": [
@@ -106,6 +116,16 @@
             "type": "command",
             "command": "node .claude/hooks/auto-git-stage.js",
             "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__elevenlabs-mcp__create_agent",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/elevenlabs-agent-governance.js",
+            "timeout": 10
           }
         ]
       }

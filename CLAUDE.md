@@ -146,6 +146,48 @@ To promote a workflow (e.g., DEV → ALPHA):
 
 ---
 
+## ELEVENLABS AGENT GOVERNANCE (v1.0)
+
+**Same governance principles applied to ElevenLabs voice agents.**
+
+### Agent Phase Tags
+
+| Phase | Modifiable | Description |
+|-------|------------|-------------|
+| `DEV` | ✅ Yes | Development agent |
+| `ALPHA` | ❌ Clone only | Early testing |
+| `BETA` | ❌ Clone only | User testing |
+| `GA` | ❌ Clone only | General availability |
+| `PROD` | ❌ Clone only | Production, customer-facing |
+| `ARCHIVED` | ❌ Read only | Deprecated |
+
+### Governance Files
+
+| File | Purpose |
+|------|---------|
+| `context/elevenlabs-agents/governance.yaml` | Agent phase assignments |
+| `.claude/hooks/elevenlabs-agent-governance.js` | Enforcement hook |
+
+### Current Agent Assignments
+
+| Agent | Phase | ID |
+|-------|-------|-----|
+| Wranngle Lead Qualifier | PROD | `agent_5701kdgf9s4vfe9rhe68ntjrms9g` |
+| Sarah - Wranngle Receptionist | GA | `agent_8001kdgp7qbyf4wvhs540be78vew` |
+| Client Data Test Agent | DEV | `agent_3801kdf7fkhcev8tkhpm92d65jws` |
+
+### Hook Behavior
+
+**PreToolUse: mcp__elevenlabs-mcp__create_agent**
+- Searches for similar existing agents
+- Suggests cloning at ≥70% similarity
+- Warns about similar agents at ≥40% similarity
+
+**PostToolUse: mcp__elevenlabs-mcp__create_agent**
+- Auto-registers new agent as DEV in governance.yaml
+
+---
+
 ## Philosophy: The Mechanic's Garage
 
 Think of this folder as a master mechanic's garage with decades of specialized tools. Every tool has its place, every workflow request has a protocol.
